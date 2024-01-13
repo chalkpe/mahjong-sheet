@@ -47,7 +47,12 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
       north: 0,
     });
 
-    setHai([""]);
+    setType("tsumo");
+    setAgari([]);
+    setHoujuu(undefined);
+    setFu([]);
+    setHan([]);
+    setHai([]);
   }, [ba, kyoku, honba, type, agari, houjuu, fu, han, hai, onCreated]);
 
   return (
@@ -183,7 +188,7 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
                   <Card title={names[winds[mode].indexOf(wind)]}>
                     <Form.Item label="부판">
                       <Space>
-                        {han[index] <= 4 && (
+                        {(!han[index] || han[index] <= 4) && (
                           <InputNumber
                             value={fu[index]}
                             onChange={(v) => {

@@ -119,7 +119,10 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           title: "형태",
           width: 100,
           dataIndex: "type",
-          render: (type: Round["type"]) => translateType(type),
+          render: (type: Round["type"], round: Round) =>
+            (type === "ron"
+              ? ["", "", "더블 ", "트리플 "][round.agari.length]
+              : "") + translateType(type),
         },
         {
           title: "방총",
