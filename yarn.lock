@@ -2817,6 +2817,11 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
+use-local-storage@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/use-local-storage/-/use-local-storage-3.0.0.tgz#ecf90952374150f0c65baf027eaaf2062a4c20c6"
+  integrity sha512-wlPNnBCG3ULIJMr5A+dvWqLiPWCfsN1Kwijq+sAhT5yV4ex0u6XmZuNwP+RerIOfzBuz1pwSZuzhZMiluGQHfQ==
+
 utif@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/utif/-/utif-2.0.1.tgz#9e1582d9bbd20011a6588548ed3266298e711759"

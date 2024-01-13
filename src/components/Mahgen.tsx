@@ -22,22 +22,24 @@ interface MahgenProps {
   sequence: string;
   showError?: boolean;
   riverMode?: boolean;
+  size?: "small" | "large";
 }
 
-const Mahgen: FC<MahgenProps> = ({ sequence, showError, riverMode }) => {
+const Mahgen: FC<MahgenProps> = ({ sequence, showError, riverMode, size }) => {
   const ref = useRef<MahgenElement>(null);
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.shadowRoot!.querySelector("img")!.style.height = "50px";
+      ref.current.shadowRoot!.querySelector("img")!.style.height =
+        size === "small" ? "50px" : "unset";
     }
-  });
+  }, [size]);
 
   return (
     <>
       <mah-gen
         ref={ref}
-        data-seq={sequence.replace('||', '|')}
+        data-seq={sequence.replace("||", "|")}
         {...(showError ? { ["data-show-err"]: "true" } : {})}
         {...(riverMode ? { ["data-river-mode"]: "true" } : {})}
       />

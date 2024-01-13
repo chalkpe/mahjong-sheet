@@ -1,21 +1,26 @@
 import { Descriptions, Typography } from "antd";
 import { FC } from "react";
 
-const labels = ["東", "南", "西", "北"];
+const labels = {
+  4: ["東", "南", "西", "北"],
+  3: ["東", "南", "西"],
+  2: ["東", "西"],
+};
 
 type Names = [string, string, string, string];
 
 interface NameEditProps {
+  mode: 2 | 3 | 4;
   value: Names;
   onChange: (value: Names) => void;
 }
 
-const NameEdit: FC<NameEditProps> = ({ value, onChange }) => {
+const NameEdit: FC<NameEditProps> = ({ mode, value, onChange }) => {
   return (
     <Descriptions
-      style={{ width: '600px' }}
+      style={{ width: "500px" }}
       column={4}
-      items={labels.map((label, index) => ({
+      items={labels[mode].map((label, index) => ({
         label,
         children: (
           <Typography.Text
