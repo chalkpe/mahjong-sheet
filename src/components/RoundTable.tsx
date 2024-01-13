@@ -1,4 +1,4 @@
-import { Button, Space, Table } from "antd";
+import { Button, Space, Table, Typography } from "antd";
 import Mahgen from "./Mahgen";
 import { Round, translateType, translateWind } from "../types/round";
 import { FC } from "react";
@@ -18,18 +18,43 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
       columns={[
         {
           title: "장/국/본장",
-          width: 120,
-          render: (round: Round) =>
-            translateWind(round.ba, mode) +
-            round.kyoku +
-            "국 " +
-            round.honba +
-            "본장",
+          width: 130,
+          render: (round: Round) => (
+            <>
+              {translateWind(round.ba, mode)}
+              {round.kyoku}국 {round.honba}
+              본장
+              {mode === 3 &&
+              round.east + round.south + round.west !== 105000 ? (
+                <Typography.Text type="danger"> (?)</Typography.Text>
+              ) : undefined}
+              {mode === 4 &&
+              round.east + round.south + round.west + round.north !== 100000 ? (
+                <Typography.Text type="danger"> (?)</Typography.Text>
+              ) : undefined}
+            </>
+          ),
         },
         {
           title: `東 (${names[0]})`,
           dataIndex: "east",
           width: 100,
+          render(value: number, _: Round, index: number) {
+            return (
+              <Typography.Text
+                editable={{
+                  text: value.toString(),
+                  onChange: (v) => {
+                    const newData = [...data];
+                    newData[index].east = parseInt(eval(v)) || 0;
+                    setData(newData);
+                  },
+                }}
+              >
+                {value}
+              </Typography.Text>
+            );
+          },
         },
         ...(mode === 3 || mode === 4
           ? [
@@ -37,6 +62,22 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
                 title: `南 (${names[1]})`,
                 dataIndex: "south",
                 width: 100,
+                render(value: number, _: Round, index: number) {
+                  return (
+                    <Typography.Text
+                      editable={{
+                        text: value.toString(),
+                        onChange: (v) => {
+                          const newData = [...data];
+                          newData[index].south = parseInt(eval(v)) || 0;
+                          setData(newData);
+                        },
+                      }}
+                    >
+                      {value}
+                    </Typography.Text>
+                  );
+                },
               },
             ]
           : []),
@@ -44,6 +85,22 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           title: `西 (${names[mode === 2 ? 1 : 2]})`,
           dataIndex: "west",
           width: 100,
+          render(value: number, _: Round, index: number) {
+            return (
+              <Typography.Text
+                editable={{
+                  text: value.toString(),
+                  onChange: (v) => {
+                    const newData = [...data];
+                    newData[index].west = parseInt(eval(v)) || 0;
+                    setData(newData);
+                  },
+                }}
+              >
+                {value}
+              </Typography.Text>
+            );
+          },
         },
         ...(mode === 4
           ? [
@@ -51,6 +108,22 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
                 title: `北 (${names[3]})`,
                 dataIndex: "north",
                 width: 100,
+                render(value: number, _: Round, index: number) {
+                  return (
+                    <Typography.Text
+                      editable={{
+                        text: value.toString(),
+                        onChange: (v) => {
+                          const newData = [...data];
+                          newData[index].north = parseInt(eval(v)) || 0;
+                          setData(newData);
+                        },
+                      }}
+                    >
+                      {value}
+                    </Typography.Text>
+                  );
+                },
               },
             ]
           : []),
