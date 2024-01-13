@@ -37,7 +37,7 @@ const Mahgen: FC<MahgenProps> = ({ sequence, showError, riverMode }) => {
     <>
       <mah-gen
         ref={ref}
-        data-seq={sequence}
+        data-seq={sequence.replace('||', '|')}
         {...(showError ? { ["data-show-err"]: "true" } : {})}
         {...(riverMode ? { ["data-river-mode"]: "true" } : {})}
       />

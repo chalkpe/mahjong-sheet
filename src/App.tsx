@@ -3,25 +3,16 @@ import Mahgen from "./components/Mahgen";
 import MahjongInput from "./components/MahjongInput";
 import { Card, Table } from "antd";
 import NameEdit from "./components/NameEdit";
-
-interface Round {
-  ba: "east" | "south" | "west" | "north";
-  kyoku: number;
-  honba: number;
-  east: number;
-  south: number;
-  west: number;
-  north: number;
-  agari: ("east" | "south" | "west" | "north" | "none")[];
-  type: "tsumo" | "ron" | "ryuukyoku";
-  fu: number;
-  han: number;
-  hai: [string, string, string];
-}
+import { Round, translateWind, translateType } from "./types/round";
 
 function App() {
   const [value, setValue] = useState("123m789m7z|_046m111^1z|7z");
-  const [names, setNames] = useState<[string, string, string, string]>(["", "", "", ""]);
+  const [names, setNames] = useState<[string, string, string, string]>([
+    "",
+    "",
+    "",
+    "",
+  ]);
 
   const data: Round[] = [
     {
@@ -45,57 +36,53 @@ function App() {
       <NameEdit value={names} onChange={setNames} />
 
       <Table
+        bordered
         dataSource={data}
         columns={[
           {
-            title: "장",
-            dataIndex: "ba",
-            width: 30,
+            title: "장/국/본장",
+            width: 120,
+            render: (round: Round) =>
+              translateWind(round.ba) +
+              round.kyoku +
+              "국 " +
+              round.honba +
+              "본장",
           },
           {
-            title: "국",
-            dataIndex: "kyoku",
-            width: 30,
-          },
-          {
-            title: "본장",
-            dataIndex: "honba",
-            width: 60,
-          },
-          {
-            title: "東",
+            title: `東 (${names[0]})`,
             dataIndex: "east",
+            width: 100,
           },
           {
-            title: "南",
+            title: `南 (${names[1]})`,
             dataIndex: "south",
+            width: 100,
           },
           {
-            title: "西",
+            title: `西 (${names[2]})`,
             dataIndex: "west",
+            width: 100,
           },
           {
-            title: "北",
+            title: `北 (${names[3]})`,
             dataIndex: "north",
+            width: 100,
           },
           {
             title: "화료",
-            dataIndex: "agari",
+            width: 100,
+            render: (round: Round) =>
+              round.agari
+                .map((a) => (a === "none" ? "노텐" : translateWind(a, names)))
+                .join(", ") +
+              " " +
+              translateType(round.type),
           },
           {
-            title: "유형",
-            dataIndex: "type",
-            width: 60,
-          },
-          {
-            title: "부",
-            dataIndex: "fu",
-            width: 30,
-          },
-          {
-            title: "판",
-            dataIndex: "han",
-            width: 30,
+            title: "부판",
+            width: 100,
+            render: (round: Round) => round.fu + "부 " + round.han + "판",
           },
           {
             title: "패",
@@ -105,6 +92,17 @@ function App() {
             ),
           },
         ]}
+        summary={() => (
+          <Table.Summary>
+            <Table.Summary.Row>
+              <Table.Summary.Cell index={0}>우마</Table.Summary.Cell>
+              <Table.Summary.Cell index={1}>+15</Table.Summary.Cell>
+              <Table.Summary.Cell index={2}>+5</Table.Summary.Cell>
+              <Table.Summary.Cell index={3}>-5</Table.Summary.Cell>
+              <Table.Summary.Cell index={4}>-15</Table.Summary.Cell>
+            </Table.Summary.Row>
+          </Table.Summary>
+        )}
       />
 
       <div className="card">
