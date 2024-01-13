@@ -49,14 +49,7 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
   }, [ba, kyoku, honba, type, agari, fu, han, hai, onCreated]);
 
   return (
-    <Card
-      title="생성하기"
-      extra={
-        <Button disabled={hai.length < 3} onClick={create}>
-          생성
-        </Button>
-      }
-    >
+    <Card title="생성하기" extra={<Button onClick={create}>생성</Button>}>
       <Space direction="vertical">
         <Form>
           <Form.Item label="장/국/본장">
@@ -133,32 +126,38 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
             </Space>
           </Form.Item>
 
-          <Form.Item label="부판">
-            <Space>
-              {han <= 4 && (
-                <InputNumber
-                  value={fu}
-                  onChange={(v) => v !== null && setFu(v)}
-                  min={20}
-                  defaultValue={30}
-                  suffix="부"
-                />
-              )}
-              <InputNumber
-                value={han}
-                onChange={(v) => v !== null && setHan(v)}
-                min={1}
-                defaultValue={1}
-                suffix="판"
-              />
-            </Space>
-          </Form.Item>
+          {type !== "ryuukyoku" && (
+            <>
+              <Form.Item label="부판">
+                <Space>
+                  {han <= 4 && (
+                    <InputNumber
+                      value={fu}
+                      onChange={(v) => v !== null && setFu(v)}
+                      min={20}
+                      defaultValue={30}
+                      suffix="부"
+                    />
+                  )}
+                  <InputNumber
+                    value={han}
+                    onChange={(v) => v !== null && setHan(v)}
+                    min={1}
+                    defaultValue={1}
+                    suffix="판"
+                  />
+                </Space>
+              </Form.Item>
 
-          <Form.Item label="화료패">
-            <MahjongInput value={hai} onChange={setHai} />
-          </Form.Item>
+              <Form.Item label="화료패">
+                <MahjongInput value={hai} onChange={setHai} />
+              </Form.Item>
+            </>
+          )}
         </Form>
-        <Mahgen sequence={hai !== '||' ? hai : "0000000000000z|0z"} />
+        {type !== "ryuukyoku" && (
+          <Mahgen sequence={hai !== "||" ? hai : "0000000000000z|0z"} />
+        )}
       </Space>
     </Card>
   );

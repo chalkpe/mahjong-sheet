@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import Mahgen from "./Mahgen";
 import { Round, translateType, translateWind } from "../types/round";
 import { FC } from "react";
@@ -69,7 +69,12 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         {
           title: "부판",
           width: 100,
-          render: (round: Round) => round.han > 4 ? round.han + "판" : round.fu + "부 " + round.han + "판",
+          render: (round: Round) =>
+            round.type === "ryuukyoku"
+              ? ""
+              : round.han > 4
+              ? round.han + "판"
+              : round.fu + "부 " + round.han + "판",
         },
         {
           title: "패",
@@ -78,8 +83,9 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         },
         {
           title: "삭제",
-          render: (_, __, index) => 
-            <button
+          render: (_, __, index) => (
+            <Button
+              type="link"
               onClick={() => {
                 const newData = [...data];
                 newData.splice(index, 1);
@@ -87,8 +93,8 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
               }}
             >
               삭제
-            </button>
-          ,
+            </Button>
+          ),
         },
       ]}
       // summary={() =>
