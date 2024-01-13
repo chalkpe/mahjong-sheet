@@ -1,7 +1,9 @@
-import { Button, Space, Table, Typography } from "antd";
+import { Button, Space, Table } from "antd";
 import Mahgen from "./Mahgen";
 import { Round, translateType, translateWind } from "../types/round";
 import { FC } from "react";
+import Score from "./Score";
+import ScoreChecker from "./ScoreChecker";
 
 interface RoundTableProps {
   mode: 2 | 3 | 4;
@@ -23,15 +25,19 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
             <>
               {translateWind(round.ba, mode)}
               {round.kyoku}국 {round.honba}
-              본장
-              {mode === 3 &&
-              round.east + round.south + round.west !== 105000 ? (
-                <Typography.Text type="danger"> (?)</Typography.Text>
-              ) : undefined}
-              {mode === 4 &&
-              round.east + round.south + round.west + round.north !== 100000 ? (
-                <Typography.Text type="danger"> (?)</Typography.Text>
-              ) : undefined}
+              본장{" "}
+              {mode === 3 && (
+                <ScoreChecker
+                  sum={round.east + round.south + round.west}
+                  expected={105000}
+                />
+              )}
+              {mode === 4 && (
+                <ScoreChecker
+                  sum={round.east + round.south + round.west + round.north}
+                  expected={100000}
+                />
+              )}
             </>
           ),
         },
@@ -39,22 +45,15 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           title: `東 (${names[0]})`,
           dataIndex: "east",
           width: 100,
-          render(value: number, _: Round, index: number) {
-            return (
-              <Typography.Text
-                editable={{
-                  text: value.toString(),
-                  onChange: (v) => {
-                    const newData = [...data];
-                    newData[index].east = parseInt(eval(v)) || 0;
-                    setData(newData);
-                  },
-                }}
-              >
-                {value}
-              </Typography.Text>
-            );
-          },
+          render: (value: number, _: Round, index: number) => (
+            <Score
+              wind="east"
+              value={value}
+              index={index}
+              data={data}
+              setData={setData}
+            />
+          ),
         },
         ...(mode === 3 || mode === 4
           ? [
@@ -62,22 +61,15 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
                 title: `南 (${names[1]})`,
                 dataIndex: "south",
                 width: 100,
-                render(value: number, _: Round, index: number) {
-                  return (
-                    <Typography.Text
-                      editable={{
-                        text: value.toString(),
-                        onChange: (v) => {
-                          const newData = [...data];
-                          newData[index].south = parseInt(eval(v)) || 0;
-                          setData(newData);
-                        },
-                      }}
-                    >
-                      {value}
-                    </Typography.Text>
-                  );
-                },
+                render: (value: number, _: Round, index: number) => (
+                  <Score
+                    wind="south"
+                    value={value}
+                    index={index}
+                    data={data}
+                    setData={setData}
+                  />
+                ),
               },
             ]
           : []),
@@ -85,22 +77,15 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           title: `西 (${names[mode === 2 ? 1 : 2]})`,
           dataIndex: "west",
           width: 100,
-          render(value: number, _: Round, index: number) {
-            return (
-              <Typography.Text
-                editable={{
-                  text: value.toString(),
-                  onChange: (v) => {
-                    const newData = [...data];
-                    newData[index].west = parseInt(eval(v)) || 0;
-                    setData(newData);
-                  },
-                }}
-              >
-                {value}
-              </Typography.Text>
-            );
-          },
+          render: (value: number, _: Round, index: number) => (
+            <Score
+              wind="west"
+              value={value}
+              index={index}
+              data={data}
+              setData={setData}
+            />
+          ),
         },
         ...(mode === 4
           ? [
@@ -108,22 +93,15 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
                 title: `北 (${names[3]})`,
                 dataIndex: "north",
                 width: 100,
-                render(value: number, _: Round, index: number) {
-                  return (
-                    <Typography.Text
-                      editable={{
-                        text: value.toString(),
-                        onChange: (v) => {
-                          const newData = [...data];
-                          newData[index].north = parseInt(eval(v)) || 0;
-                          setData(newData);
-                        },
-                      }}
-                    >
-                      {value}
-                    </Typography.Text>
-                  );
-                },
+                render: (value: number, _: Round, index: number) => (
+                  <Score
+                    wind="north"
+                    value={value}
+                    index={index}
+                    data={data}
+                    setData={setData}
+                  />
+                ),
               },
             ]
           : []),
