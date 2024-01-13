@@ -7,7 +7,7 @@ interface MahjongInputProps {
 }
 
 const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
-  const [menzenStr, furoStr, agariStr] = value.split("|");
+  const [menzenStr, furoStr, agariStr] = (value ?? "").split("|");
 
   const [menzen, setMenzen] = useState(menzenStr ?? '');
   const [furo, setFuro] = useState(furoStr ?? '');

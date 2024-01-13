@@ -24,10 +24,11 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
   const [kyoku, setKyoku] = useState(1);
   const [honba, setHonba] = useState(0);
   const [type, setType] = useState<AgariType>("tsumo");
-  const [agari, setAgari] = useState<Round["agari"]>([]);
-  const [fu, setFu] = useState(30);
-  const [han, setHan] = useState(1);
-  const [hai, setHai] = useState("");
+  const [agari, setAgari] = useState<Wind[]>([]);
+  const [houjuu, setHoujuu] = useState<Wind>();
+  const [fu, setFu] = useState<number[]>([]);
+  const [han, setHan] = useState<number[]>([]);
+  const [hai, setHai] = useState<string[]>([]);
 
   const create = useCallback(() => {
     onCreated({
@@ -36,6 +37,7 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
       honba,
       type,
       agari,
+      houjuu,
       fu,
       han,
       hai,
@@ -45,8 +47,8 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
       north: 0,
     });
 
-    setHai("");
-  }, [ba, kyoku, honba, type, agari, fu, han, hai, onCreated]);
+    setHai([""]);
+  }, [ba, kyoku, honba, type, agari, houjuu, fu, han, hai, onCreated]);
 
   return (
     <Card title="생성하기" extra={<Button onClick={create}>생성</Button>}>
@@ -92,7 +94,8 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
                 value={type}
                 onChange={(type) => {
                   setType(type);
-                  setAgari(type === "tsumo" ? [] : ["none"]);
+                  setAgari([]);
+                  setHoujuu(undefined);
                 }}
                 style={{ width: 70 }}
                 options={[
@@ -112,52 +115,92 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
                   ))}
                 </Radio.Group>
               ) : (
-                <Checkbox.Group
-                  value={agari}
-                  onChange={(v) =>
-                    setAgari(v.length ? (v as Wind[]) : ["none"])
-                  }
-                >
-                  {names.slice(0, mode).map((name, index) => (
-                    <Checkbox value={winds[mode][index]}>{name}</Checkbox>
-                  ))}
-                </Checkbox.Group>
+                <>
+                  {type === "ron" && (
+                    <Select
+                      value={houjuu}
+                      onChange={setHoujuu}
+                      placeholder="방총"
+                      style={{ width: 120 }}
+                      options={names.slice(0, mode).map((name, index) => ({
+                        label: name + " 방총",
+                        value: winds[mode][index],
+                      }))}
+                    />
+                  )}
+                  <Checkbox.Group
+                    value={agari}
+                    onChange={(v) => setAgari(v.length ? (v as Wind[]) : [])}
+                  >
+                    {winds[mode]
+                      .filter((wind) => wind !== houjuu)
+                      .map((wind) => (
+                        <Checkbox value={wind}>
+                          {names[winds[mode].indexOf(wind)]}
+                        </Checkbox>
+                      ))}
+                  </Checkbox.Group>
+                </>
               )}
             </Space>
           </Form.Item>
 
-          {type !== "ryuukyoku" && (
-            <>
-              <Form.Item label="부판">
-                <Space>
-                  {han <= 4 && (
-                    <InputNumber
-                      value={fu}
-                      onChange={(v) => v !== null && setFu(v)}
-                      min={20}
-                      defaultValue={30}
-                      suffix="부"
-                    />
-                  )}
-                  <InputNumber
-                    value={han}
-                    onChange={(v) => v !== null && setHan(v)}
-                    min={1}
-                    defaultValue={1}
-                    suffix="판"
-                  />
-                </Space>
-              </Form.Item>
-
-              <Form.Item label="화료패">
-                <MahjongInput value={hai} onChange={setHai} />
-              </Form.Item>
-            </>
-          )}
+          <Space direction="vertical">
+            {type !== "ryuukyoku" &&
+              agari.map((_, index) => (
+                <Card>
+                  <Form.Item label="부판">
+                    <Space>
+                      {han[index] <= 4 && (
+                        <InputNumber
+                          value={fu[index]}
+                          onChange={(v) => {
+                            if (v === null) return;
+                            const newFu = [...fu];
+                            newFu[index] = v;
+                            setFu(newFu);
+                          }}
+                          min={20}
+                          step={5}
+                          suffix="부"
+                        />
+                      )}
+                      <InputNumber
+                        value={han[index]}
+                        onChange={(v) => {
+                          if (v === null) return;
+                          const newHan = [...han];
+                          newHan[index] = v;
+                          setHan(newHan);
+                        }}
+                        min={1}
+                        suffix="판"
+                      />
+                    </Space>
+                  </Form.Item>
+                  <Form.Item label="화료패">
+                    <Space direction="vertical">
+                      <MahjongInput
+                        value={hai[index]}
+                        onChange={(h) => {
+                          const newHai = [...hai];
+                          newHai[index] = h;
+                          setHai(newHai);
+                        }}
+                      />
+                      <Mahgen
+                        sequence={
+                          hai[index] !== "||"
+                            ? hai[index] ?? "||"
+                            : "0000000000000z|0z"
+                        }
+                      />
+                    </Space>
+                  </Form.Item>
+                </Card>
+              ))}
+          </Space>
         </Form>
-        {type !== "ryuukyoku" && (
-          <Mahgen sequence={hai !== "||" ? hai : "0000000000000z|0z"} />
-        )}
       </Space>
     </Card>
   );

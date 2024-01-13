@@ -10,11 +10,12 @@ export interface Round {
   south: number;
   west: number;
   north: number;
-  agari: (Wind | "none")[];
+  agari: Wind[];
+  houjuu?: Wind;
   type: AgariType;
-  fu: number;
-  han: number;
-  hai: string;
+  fu: number[];
+  han: number[];
+  hai: string[];
 }
 
 export const winds = {

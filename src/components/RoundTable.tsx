@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Space, Table } from "antd";
 import Mahgen from "./Mahgen";
 import { Round, translateType, translateWind } from "../types/round";
 import { FC } from "react";
@@ -58,13 +58,23 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           title: "화료",
           width: 100,
           render: (round: Round) =>
-            round.agari
-              .map((a) =>
-                a === "none" ? "노텐" : translateWind(a, mode, names)
-              )
-              .join(", ") +
-            " " +
-            translateType(round.type),
+            round.agari.flatMap((a, index) =>
+              a.length
+                ? [index > 0 ? <br /> : "", translateWind(a, mode, names)]
+                : ["노텐"]
+            ),
+        },
+        {
+          title: "형태",
+          width: 100,
+          dataIndex: "type",
+          render: (type: Round["type"]) => translateType(type),
+        },
+        {
+          title: "방총",
+          width: 100,
+          render: (round: Round) =>
+            round.houjuu ? translateWind(round.houjuu, mode, names) : "-",
         },
         {
           title: "부판",
@@ -72,14 +82,25 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           render: (round: Round) =>
             round.type === "ryuukyoku"
               ? ""
-              : round.han > 4
-              ? round.han + "판"
-              : round.fu + "부 " + round.han + "판",
+              : round.agari.flatMap((_, index) =>
+                  round.han[index] > 4
+                    ? [index > 0 ? <br /> : "", round.han[index] + "판"]
+                    : [
+                        index > 0 ? <br /> : "",
+                        round.fu[index] + "부 " + round.han[index] + "판",
+                      ]
+                ),
         },
         {
           title: "패",
           dataIndex: "hai",
-          render: (hai: string) => <Mahgen sequence={hai} size="small" />,
+          render: (hai: string[]) => (
+            <Space direction="vertical">
+              {hai.map((h) => (
+                <Mahgen sequence={h} size="small" />
+              ))}
+            </Space>
+          ),
         },
         {
           title: "삭제",
