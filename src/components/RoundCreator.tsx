@@ -58,7 +58,11 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
             <Space>
               <Select
                 value={ba}
-                onChange={setBa}
+                onChange={(b) => {
+                  setBa(b);
+                  setKyoku(1);
+                  setHonba(0);
+                }}
                 style={{ width: 70 }}
                 options={[
                   { label: "동", value: "east" },
@@ -71,7 +75,10 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
               />
               <Select
                 value={kyoku}
-                onChange={setKyoku}
+                onChange={(k) => {
+                  setKyoku(k);
+                  setHonba(0);
+                }}
                 style={{ width: 70 }}
                 options={[1, 2, 3, 4]
                   .slice(0, mode)
@@ -119,7 +126,10 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
                   {type === "ron" && (
                     <Select
                       value={houjuu}
-                      onChange={setHoujuu}
+                      onChange={(h) => {
+                        setHoujuu(h);
+                        setAgari([]);
+                      }}
                       placeholder="방총"
                       style={{ width: 120 }}
                       options={names.slice(0, mode).map((name, index) => ({
@@ -130,7 +140,15 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
                   )}
                   <Checkbox.Group
                     value={agari}
-                    onChange={(v) => setAgari(v.length ? (v as Wind[]) : [])}
+                    onChange={(v) => {
+                      const a = v as Wind[];
+                      setAgari(
+                        winds[mode].filter((wind) =>
+                          a.includes(wind as Wind)
+                        ) as Wind[]
+                      );
+                      setHai(Array(a.length).fill(""));
+                    }}
                   >
                     {winds[mode]
                       .filter((wind) => wind !== houjuu)
@@ -146,59 +164,73 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
           </Form.Item>
 
           <Space direction="vertical">
-            {type !== "ryuukyoku" &&
-              agari.map((_, index) => (
-                <Card>
-                  <Form.Item label="부판">
-                    <Space>
-                      {han[index] <= 4 && (
-                        <InputNumber
-                          value={fu[index]}
-                          onChange={(v) => {
-                            if (v === null) return;
-                            const newFu = [...fu];
-                            newFu[index] = v;
-                            setFu(newFu);
-                          }}
-                          min={20}
-                          step={5}
-                          suffix="부"
-                        />
-                      )}
-                      <InputNumber
-                        value={han[index]}
-                        onChange={(v) => {
-                          if (v === null) return;
+            {type === "ryuukyoku"
+              ? agari.map((wind, index) => (
+                  <Card title={names[winds[mode].indexOf(wind)]}>
+                    <Form.Item label="유국만관?">
+                      <Checkbox
+                        value={han[index] === -1}
+                        onChange={(e) => {
                           const newHan = [...han];
-                          newHan[index] = v;
+                          newHan[index] = e.target.checked ? -1 : 0;
                           setHan(newHan);
                         }}
-                        min={1}
-                        suffix="판"
                       />
-                    </Space>
-                  </Form.Item>
-                  <Form.Item label="화료패">
-                    <Space direction="vertical">
-                      <MahjongInput
-                        value={hai[index]}
-                        onChange={(h) => {
-                          const newHai = [...hai];
-                          newHai[index] = h;
-                          setHai(newHai);
-                        }}
-                      />
-                      <Mahgen
-                        sequence={
-                          hai[index] !== "||"
-                            ? hai[index] ?? "||"
-                            : "0000000000000z|0z"
-                        }
-                      />
-                    </Space>
-                  </Form.Item>
-                </Card>
-              ))}
+                    </Form.Item>
+                  </Card>
+                ))
+              : agari.map((wind, index) => (
+                  <Card title={names[winds[mode].indexOf(wind)]}>
+                    <Form.Item label="부판">
+                      <Space>
+                        {han[index] <= 4 && (
+                          <InputNumber
+                            value={fu[index]}
+                            onChange={(v) => {
+                              if (v === null) return;
+                              const newFu = [...fu];
+                              newFu[index] = v;
+                              setFu(newFu);
+                            }}
+                            min={20}
+                            step={5}
+                            suffix="부"
+                          />
+                        )}
+                        <InputNumber
+                          value={han[index]}
+                          onChange={(v) => {
+                            if (v === null) return;
+                            const newHan = [...han];
+                            newHan[index] = v;
+                            setHan(newHan);
+                          }}
+                          min={1}
+                          suffix="판"
+                        />
+                      </Space>
+                    </Form.Item>
+                    <Form.Item label="화료패">
+                      <Space direction="vertical">
+                        <MahjongInput
+                          value={hai[index]}
+                          onChange={(h) => {
+                            const newHai = [...hai];
+                            newHai[index] = h;
+                            setHai(newHai);
+                          }}
+                        />
+                        <Mahgen
+                          sequence={
+                            hai[index] && hai[index] !== "||"
+                              ? hai[index]
+                              : "0000000000000z|0z"
+                          }
+                        />
+                      </Space>
+                    </Form.Item>
+                  </Card>
+                ))}
           </Space>
         </Form>
       </Space>
