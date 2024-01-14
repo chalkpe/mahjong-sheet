@@ -8,10 +8,14 @@ interface ScoreCheckerProps {
 
 const ScoreChecker: FC<ScoreCheckerProps> = ({ sum, expected }) => {
   return (
-    <Typography.Text type={sum === expected ? "success" : "danger"}>
+    <Typography.Text
+      type={
+        sum === expected ? "success" : sum < expected ? "warning" : "danger"
+      }
+    >
       ●
     </Typography.Text>
   );
-}
+};
 
 export default ScoreChecker;

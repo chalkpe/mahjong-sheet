@@ -1,9 +1,9 @@
+import { FC } from "react";
 import { Button, Space, Table } from "antd";
 import Mahgen from "./Mahgen";
-import { Round, translateType, translateWind } from "../types/round";
-import { FC } from "react";
 import Score from "./Score";
 import ScoreChecker from "./ScoreChecker";
+import { Round, translateType, translateWind } from "../types/round";
 
 interface RoundTableProps {
   mode: 2 | 3 | 4;
