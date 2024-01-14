@@ -42,7 +42,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           ),
         },
         {
-          title: `東 (${names[0]})`,
+          title: names[0],
           dataIndex: "east",
           width: 100,
           render: (value: number, _: Round, index: number) => (
@@ -58,7 +58,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         ...(mode === 3 || mode === 4
           ? [
               {
-                title: `南 (${names[1]})`,
+                title: names[1],
                 dataIndex: "south",
                 width: 100,
                 render: (value: number, _: Round, index: number) => (
@@ -74,7 +74,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
             ]
           : []),
         {
-          title: `西 (${names[mode === 2 ? 1 : 2]})`,
+          title: names[mode === 2 ? 1 : 2],
           dataIndex: "west",
           width: 100,
           render: (value: number, _: Round, index: number) => (
@@ -90,7 +90,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         ...(mode === 4
           ? [
               {
-                title: `北 (${names[3]})`,
+                title: names[3],
                 dataIndex: "north",
                 width: 100,
                 render: (value: number, _: Round, index: number) => (
