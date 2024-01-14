@@ -1,16 +1,17 @@
 import "./App.css";
 
-import { Card, Form, Segmented, Space } from "antd";
+import { Button, Card, Form, Segmented, Space } from "antd";
+import { GithubOutlined } from "@ant-design/icons";
 import useLocalStorage from "use-local-storage";
 
 import NameEdit from "./components/NameEdit";
 import RoundTable from "./components/RoundTable";
-
-import { Round } from "./types/round";
 import RoundCreator from "./components/RoundCreator";
 
+import { Round } from "./types/round";
+
 function App() {
-  const [mode, setMode] = useLocalStorage<2 | 3 | 4>('mode', 4);
+  const [mode, setMode] = useLocalStorage<2 | 3 | 4>("mode", 4);
 
   const [names, setNames] = useLocalStorage<[string, string, string, string]>(
     "names",
@@ -21,7 +22,17 @@ function App() {
 
   return (
     <Space direction="vertical">
-      <Card title="기본 설정">
+      <Card
+        title="기본 설정"
+        extra={
+          <Button
+            icon={<GithubOutlined />}
+            onClick={() =>
+              open("https://github.com/chalkpe/mahjong-sheet", "_blank")
+            }
+          />
+        }
+      >
         <Form>
           <Form.Item label="모드">
             <Segmented
