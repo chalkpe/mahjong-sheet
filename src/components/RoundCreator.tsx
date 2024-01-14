@@ -76,11 +76,9 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
                 style={{ width: 70 }}
                 options={[
                   { label: "동", value: "east" },
-                  ...(mode === 3 || mode === 4
-                    ? [{ label: "남", value: "south" }]
-                    : []),
+                  { label: "남", value: "south" },
                   { label: "서", value: "west" },
-                  ...(mode === 4 ? [{ label: "북", value: "north" }] : []),
+                  { label: "북", value: "north" },
                 ]}
               />
               <Select
