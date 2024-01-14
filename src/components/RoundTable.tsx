@@ -23,7 +23,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           width: 130,
           render: (round: Round) => (
             <>
-              {translateWind(round.ba, mode)}
+              {translateWind(round.ba, 4)}
               {round.kyoku}국 {round.honba}
               본장{" "}
               {mode === 3 && (
