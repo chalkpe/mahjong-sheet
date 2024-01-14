@@ -132,7 +132,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         },
         {
           title: "부판",
-          width: 100,
+          width: 140,
           render: (round: Round) =>
             round.type === "ryuukyoku"
               ? round.agari.flatMap((_, index) => [
@@ -140,7 +140,16 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
                   round.han[index] === -1 ? "만관" : "-",
                 ])
               : round.agari.flatMap((_, index) =>
-                  round.han[index] > 4
+                  round.han[index] >= 13
+                    ? [
+                        index > 0 ? <br /> : "",
+                        round.kazoe?.[index]
+                          ? " 헤아림 역만"
+                          : round.han[index] === 13
+                          ? " 역만"
+                          : " " + Math.floor(round.han[index] / 13) + "배 역만",
+                      ]
+                    : round.han[index] > 4
                     ? [index > 0 ? <br /> : "", round.han[index] + "판"]
                     : [
                         index > 0 ? <br /> : "",

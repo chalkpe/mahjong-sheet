@@ -31,6 +31,7 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
   const [houjuu, setHoujuu] = useState<Wind>();
   const [fu, setFu] = useState<number[]>([]);
   const [han, setHan] = useState<number[]>([]);
+  const [kazoe, setKazoe] = useState<boolean[]>([]);
   const [hai, setHai] = useState<string[]>([]);
 
   const create = useCallback(() => {
@@ -43,6 +44,7 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
       houjuu,
       fu,
       han,
+      kazoe,
       hai,
       east: 0,
       south: 0,
@@ -56,7 +58,7 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
     setFu([]);
     setHan([]);
     setHai([]);
-  }, [ba, kyoku, honba, type, agari, houjuu, fu, han, hai, onCreated]);
+  }, [ba, kyoku, honba, type, agari, houjuu, fu, han, kazoe, hai, onCreated]);
 
   return (
     <Card title="생성하기" extra={<Button onClick={create}>생성</Button>}>
@@ -218,6 +220,20 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
                           min={1}
                           suffix="판"
                         />
+                        {han[index] >= 13 && (
+                          <>
+                            <Checkbox
+                              value={kazoe[index]}
+                              onChange={(e) => {
+                                const newKazoe = [...kazoe];
+                                newKazoe[index] = e.target.checked;
+                                setKazoe(newKazoe);
+                              }}
+                            >
+                              헤아림 역만?
+                            </Checkbox>
+                          </>
+                        )}
                       </Space>
                     </Form.Item>
                     <Form.Item

@@ -15,6 +15,7 @@ export interface Round {
   type: AgariType;
   fu: number[];
   han: number[];
+  kazoe?: boolean[];
   hai: string[];
 }
 
