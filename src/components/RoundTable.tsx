@@ -163,7 +163,11 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           render: (hai: string[]) => (
             <Space direction="vertical">
               {hai.map((h) => (
-                <Mahgen sequence={h} size="small" />
+                <Space direction="horizontal">
+                  {h.split("|").filter(Boolean).map((hh) => (
+                    <Mahgen sequence={hh} size="small" />
+                  ))}
+                </Space>
               ))}
             </Space>
           ),
