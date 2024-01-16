@@ -5,6 +5,7 @@ import { GithubOutlined } from "@ant-design/icons";
 import useLocalStorage from "use-local-storage";
 
 import NameEdit from "./components/NameEdit";
+import UmaTable from "./components/UmaTable";
 import RoundTable from "./components/RoundTable";
 import RoundCreator from "./components/RoundCreator";
 
@@ -47,11 +48,17 @@ function App() {
         </Form>
       </Card>
       <Card>
-        <RoundTable mode={mode} data={data} setData={setData} names={names} />
+        <Space direction="vertical" size="large">
+          <RoundTable mode={mode} data={data} setData={setData} names={names} />
+          {mode !== 2 && data.length > 0 && (
+            <UmaTable mode={mode} round={data[data.length - 1]} names={names} />
+          )}
+        </Space>
       </Card>
       <RoundCreator
         mode={mode}
         names={names}
+        lastRound={data.length ? data[data.length - 1] : undefined}
         onCreated={(round) => setData([...data, round])}
       />
     </Space>

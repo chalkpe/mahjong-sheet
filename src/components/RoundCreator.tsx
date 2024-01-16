@@ -19,10 +19,11 @@ import { AgariType, Round, Wind, winds } from "../types/round";
 interface RoundCreatorProps {
   mode: 2 | 3 | 4;
   names: [string, string, string, string];
+  lastRound?: Round;
   onCreated: (round: Round) => void;
 }
 
-const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
+const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, lastRound, onCreated }) => {
   const [ba, setBa] = useState<Wind>("east");
   const [kyoku, setKyoku] = useState(1);
   const [honba, setHonba] = useState(0);
@@ -46,10 +47,10 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, onCreated }) => {
       han,
       kazoe,
       hai,
-      east: 0,
-      south: 0,
-      west: 0,
-      north: 0,
+      east: lastRound?.east ?? 0,
+      south: lastRound?.south ?? 0,
+      west: lastRound?.west ?? 0,
+      north: lastRound?.north ?? 0,
     });
 
     setType("tsumo");

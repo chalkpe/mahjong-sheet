@@ -16,6 +16,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
   return (
     <Table
       bordered
+      pagination={false}
       dataSource={data}
       columns={[
         {
@@ -164,9 +165,12 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
             <Space direction="vertical">
               {hai.map((h) => (
                 <Space direction="horizontal">
-                  {h.split("|").filter(Boolean).map((hh) => (
-                    <Mahgen sequence={hh} size="small" />
-                  ))}
+                  {h
+                    .split("|")
+                    .filter(Boolean)
+                    .map((hh) => (
+                      <Mahgen sequence={hh} size="small" />
+                    ))}
                 </Space>
               ))}
             </Space>
@@ -188,19 +192,6 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           ),
         },
       ]}
-      // summary={() =>
-      //   mode > 2 ? (
-      //     <Table.Summary>
-      //       <Table.Summary.Row>
-      //         <Table.Summary.Cell index={0}>우마</Table.Summary.Cell>
-      //         <Table.Summary.Cell index={1}>+15</Table.Summary.Cell>
-      //         <Table.Summary.Cell index={2}>+5</Table.Summary.Cell>
-      //         <Table.Summary.Cell index={3}>-5</Table.Summary.Cell>
-      //         <Table.Summary.Cell index={4}>-15</Table.Summary.Cell>
-      //       </Table.Summary.Row>
-      //     </Table.Summary>
-      //   ) : undefined
-      // }
     />
   );
 };
