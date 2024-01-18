@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -14,7 +14,7 @@ import {
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import Mahgen from "./Mahgen";
 import MahjongInput from "./MahjongInput";
-import { AgariType, Round, Wind, winds } from "../types/round";
+import { AgariType, Round, Wind, translateType, winds } from "../types/round";
 
 interface RoundCreatorProps {
   mode: 2 | 3 | 4;
@@ -23,7 +23,12 @@ interface RoundCreatorProps {
   onCreated: (round: Round) => void;
 }
 
-const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, lastRound, onCreated }) => {
+const RoundCreator: FC<RoundCreatorProps> = ({
+  mode,
+  names,
+  lastRound,
+  onCreated,
+}) => {
   const [ba, setBa] = useState<Wind>("east");
   const [kyoku, setKyoku] = useState(1);
   const [honba, setHonba] = useState(0);
@@ -34,6 +39,19 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, lastRound, onCreated
   const [han, setHan] = useState<number[]>([]);
   const [kazoe, setKazoe] = useState<boolean[]>([]);
   const [hai, setHai] = useState<string[]>([]);
+
+  const disabled = useMemo(
+    () =>
+      (type === "tsumo" || type === "ryuukyoku"
+        ? agari.length === 0
+        : houjuu === undefined || agari.length === 0) ||
+      (type !== "ryuukyoku" &&
+        [...Array(agari.length).keys()].some(
+          (i) =>
+            !han[i] || (han[i] <= 4 && !fu[i]) || !hai[i] || hai[i] === "||"
+        )),
+    [type, agari, houjuu, fu, han, hai]
+  );
 
   const create = useCallback(() => {
     onCreated({
@@ -62,7 +80,14 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, lastRound, onCreated
   }, [ba, kyoku, honba, type, agari, houjuu, fu, han, kazoe, hai, onCreated]);
 
   return (
-    <Card title="생성하기" extra={<Button onClick={create}>생성</Button>}>
+    <Card
+      title="생성하기"
+      extra={
+        <Button disabled={disabled} onClick={create}>
+          생성
+        </Button>
+      }
+    >
       <Space direction="vertical">
         <Form>
           <Form.Item label="장/국/본장">
@@ -151,6 +176,7 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, lastRound, onCreated
                   )}
                   <Checkbox.Group
                     value={agari}
+                    disabled={type === "ron" && houjuu === undefined}
                     onChange={(v) => {
                       const a = v as Wind[];
                       setAgari(
@@ -158,6 +184,8 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, lastRound, onCreated
                           a.includes(wind as Wind)
                         ) as Wind[]
                       );
+                      setFu([]);
+                      setHan([]);
                       setHai(Array(a.length).fill(""));
                     }}
                   >
@@ -191,7 +219,12 @@ const RoundCreator: FC<RoundCreatorProps> = ({ mode, names, lastRound, onCreated
                   </Card>
                 ))
               : agari.map((wind, index) => (
-                  <Card key={wind} title={names[winds[mode].indexOf(wind)]}>
+                  <Card
+                    key={wind}
+                    title={`${names[winds[mode].indexOf(wind)]} ${translateType(
+                      type
+                    )}`}
+                  >
                     <Form.Item label="부판">
                       <Space>
                         {(!han[index] || han[index] <= 4) && (
