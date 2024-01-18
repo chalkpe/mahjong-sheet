@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -50,8 +50,24 @@ const RoundCreator: FC<RoundCreatorProps> = ({
           (i) =>
             !han[i] || (han[i] <= 4 && !fu[i]) || !hai[i] || hai[i] === "||"
         )),
-    [type, agari, houjuu, fu, han, hai]
+    [agari.length, fu, hai, han, houjuu, type]
   );
+
+  const reset = useCallback(() => {
+    setType("tsumo");
+    setAgari([]);
+    setHoujuu(undefined);
+    setFu([]);
+    setHan([]);
+    setHai([]);
+  }, []);
+
+  useEffect(() => {
+    setBa("east");
+    setKyoku(1);
+    setHonba(0);
+    reset();
+  }, [mode, reset]);
 
   const create = useCallback(() => {
     onCreated({
@@ -71,13 +87,25 @@ const RoundCreator: FC<RoundCreatorProps> = ({
       north: lastRound?.north ?? 0,
     });
 
-    setType("tsumo");
-    setAgari([]);
-    setHoujuu(undefined);
-    setFu([]);
-    setHan([]);
-    setHai([]);
-  }, [ba, kyoku, honba, type, agari, houjuu, fu, han, kazoe, hai, onCreated]);
+    reset();
+  }, [
+    onCreated,
+    ba,
+    kyoku,
+    honba,
+    type,
+    agari,
+    houjuu,
+    fu,
+    han,
+    kazoe,
+    hai,
+    lastRound?.east,
+    lastRound?.south,
+    lastRound?.west,
+    lastRound?.north,
+    reset,
+  ]);
 
   return (
     <Card
