@@ -98,7 +98,7 @@ const UmaTable: FC<UmaTableProps> = ({ mode, round, names }) => {
           title: "총점",
           east: renderScore(scores[0].score),
           south: renderScore(scores[1].score),
-          west: renderScore(scores[2]?.score ?? 0),
+          west: renderScore(scores[2].score),
           north: renderScore(scores[3]?.score ?? 0),
         },
 
@@ -107,7 +107,7 @@ const UmaTable: FC<UmaTableProps> = ({ mode, round, names }) => {
           east: scores[0].rank,
           south: scores[1].rank,
           west: scores[2].rank,
-          north: scores[3].rank,
+          north: scores[3]?.rank,
         },
       ]}
     />
