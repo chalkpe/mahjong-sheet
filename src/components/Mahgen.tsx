@@ -8,6 +8,7 @@ interface MahgenElement extends HTMLElement {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       "mah-gen": React.DetailedHTMLProps<
