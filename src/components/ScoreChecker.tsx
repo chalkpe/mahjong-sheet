@@ -13,7 +13,7 @@ const ScoreChecker: FC<ScoreCheckerProps> = ({ sum, expected }) => {
         sum === expected ? "success" : sum < expected ? "warning" : "danger"
       }
     >
-      ●
+      ●{sum < expected && `${Math.floor((expected - sum) / 1000)}`}
     </Typography.Text>
   );
 };
