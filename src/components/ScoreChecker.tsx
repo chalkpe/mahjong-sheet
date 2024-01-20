@@ -13,7 +13,10 @@ const ScoreChecker: FC<ScoreCheckerProps> = ({ sum, expected }) => {
         sum === expected ? "success" : sum < expected ? "warning" : "danger"
       }
     >
-      ●{sum < expected && `${Math.floor((expected - sum) / 1000)}`}
+      ●
+      <span style={{ fontSize: "0.75rem" }}>
+        {sum < expected && `${Math.floor((expected - sum) / 1000)}`}
+      </span>
     </Typography.Text>
   );
 };
