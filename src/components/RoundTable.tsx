@@ -3,7 +3,12 @@ import { Button, Space, Table } from "antd";
 import Mahgen from "./Mahgen";
 import Score from "./Score";
 import ScoreChecker from "./ScoreChecker";
-import { Round, translateType, translateWind } from "../types/round";
+import {
+  Round,
+  ryuukyokuTypes,
+  translateType,
+  translateWind,
+} from "../types/round";
 
 interface RoundTableProps {
   mode: 2 | 3 | 4;
@@ -115,7 +120,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           width: 100,
           align: "center",
           dataIndex: "agari",
-          render: (agari: Round['agari']) =>
+          render: (agari: Round["agari"]) =>
             agari.length !== mode && agari.length > 0
               ? agari.flatMap((a, index) => [
                   index > 0 ? <br /> : "",
@@ -146,12 +151,15 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           align: "center",
           render: (round: Round) =>
             round.type === "ryuukyoku"
-              ? round.agari.length !== mode && round.agari.length > 0
-                ? round.agari.flatMap((_, index) => [
-                    index > 0 ? <br /> : "",
-                    round.han[index] === -1 ? "만관" : "-",
-                  ])
-                : "-"
+              ? !round.ryuukyokuType || round.ryuukyokuType === "ryuukyoku"
+                ? round.agari.length !== mode && round.agari.length > 0
+                  ? round.agari.flatMap((_, index) => [
+                      index > 0 ? <br /> : "",
+                      round.han[index] === -1 ? "만관" : "-",
+                    ])
+                  : "-"
+                : ryuukyokuTypes.find((r) => r.value === round.ryuukyokuType)
+                    ?.label ?? "-"
               : round.agari.flatMap((_, index) =>
                   round.han[index] >= 13
                     ? [
