@@ -46,6 +46,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           title: names[0],
           dataIndex: "east",
           width: 100,
+          align: "center",
           render: (value: number, _: Round, index: number) => (
             <Score
               wind="east"
@@ -62,6 +63,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
                 title: names[1],
                 dataIndex: "south",
                 width: 100,
+                align: "center" as const,
                 render: (value: number, _: Round, index: number) => (
                   <Score
                     wind="south"
@@ -78,6 +80,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           title: names[mode === 2 ? 1 : 2],
           dataIndex: "west",
           width: 100,
+          align: "center",
           render: (value: number, _: Round, index: number) => (
             <Score
               wind="west"
@@ -94,6 +97,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
                 title: names[3],
                 dataIndex: "north",
                 width: 100,
+                align: "center" as const,
                 render: (value: number, _: Round, index: number) => (
                   <Score
                     wind="north"
@@ -109,16 +113,20 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         {
           title: "화료",
           width: 100,
-          render: (round: Round) =>
-            round.agari.flatMap((a, index) =>
-              a.length
-                ? [index > 0 ? <br /> : "", translateWind(a, mode, names)]
-                : ["노텐"]
-            ),
+          align: "center",
+          dataIndex: "agari",
+          render: (agari: Round['agari']) =>
+            agari.length !== mode && agari.length > 0
+              ? agari.flatMap((a, index) => [
+                  index > 0 ? <br /> : "",
+                  translateWind(a, mode, names),
+                ])
+              : "-",
         },
         {
           title: "형태",
           width: 100,
+          align: "center",
           dataIndex: "type",
           render: (type: Round["type"], round: Round) =>
             (type === "ron"
@@ -128,18 +136,22 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         {
           title: "방총",
           width: 100,
+          align: "center",
           render: (round: Round) =>
             round.houjuu ? translateWind(round.houjuu, mode, names) : "-",
         },
         {
           title: "부판",
           width: 140,
+          align: "center",
           render: (round: Round) =>
             round.type === "ryuukyoku"
-              ? round.agari.flatMap((_, index) => [
-                  index > 0 ? <br /> : "",
-                  round.han[index] === -1 ? "만관" : "-",
-                ])
+              ? round.agari.length !== mode && round.agari.length > 0
+                ? round.agari.flatMap((_, index) => [
+                    index > 0 ? <br /> : "",
+                    round.han[index] === -1 ? "만관" : "-",
+                  ])
+                : "-"
               : round.agari.flatMap((_, index) =>
                   round.han[index] >= 13
                     ? [
@@ -178,6 +190,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         },
         {
           title: "삭제",
+          align: "center",
           render: (_, __, index) => (
             <Button
               type="link"

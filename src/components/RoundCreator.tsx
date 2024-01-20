@@ -42,7 +42,9 @@ const RoundCreator: FC<RoundCreatorProps> = ({
 
   const disabled = useMemo(
     () =>
-      (type === "tsumo" || type === "ryuukyoku"
+      (type === "ryuukyoku"
+        ? false
+        : type === "tsumo"
         ? agari.length === 0
         : houjuu === undefined || agari.length === 0) ||
       (type !== "ryuukyoku" &&
