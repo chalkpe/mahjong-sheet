@@ -71,9 +71,24 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
           />
         </Form.Item>
       </Form>
-      <Mahgen
-        sequence={value && value !== "||" ? value : "0000000000000z|0z"}
-      />
+
+      {!value || value === "||" ? (
+        <Space direction="horizontal">
+          <Mahgen sequence="0000000000000z" />
+          <Mahgen sequence="0z" />
+        </Space>
+      ) : (
+        <Space direction="horizontal">
+          {value
+            .split("|")
+            .map((hh, i) =>
+              hh || i === 2 ? (
+                <Mahgen key={hh + i} sequence={hh || "0z"} />
+              ) : undefined
+            )
+            .filter(Boolean)}
+        </Space>
+      )}
       <MahjongKeyboard onInput={onInput} onDelete={onDelete} />
     </Space>
   );
