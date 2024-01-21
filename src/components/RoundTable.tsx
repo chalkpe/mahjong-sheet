@@ -1,13 +1,15 @@
 import { FC } from "react";
-import { Button, Space, Table } from "antd";
-import Mahgen from "./Mahgen";
+import { Button, Table } from "antd";
+
+import FuHan from "./table/FuHan";
 import Score from "./table/Score";
 import ScoreChecker from "./table/ScoreChecker";
 
-import { ryuukyokuTypeOptions, translateAgariType } from "../types/agari";
+import { translateAgariType } from "../types/agari";
 import { Mode } from "../types/mode";
 import { Round } from "../types/round";
 import { translateWind } from "../types/wind";
+import Hai from "./table/Hai";
 
 interface RoundTableProps {
   mode: Mode;
@@ -148,52 +150,12 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           title: "부판",
           width: 140,
           align: "center",
-          render: (round: Round) =>
-            round.type === "ryuukyoku"
-              ? !round.ryuukyokuType || round.ryuukyokuType === "ryuukyoku"
-                ? round.agari.length !== mode && round.agari.length > 0
-                  ? round.agari.flatMap((_, index) => [
-                      index > 0 ? <br /> : "",
-                      round.han[index] === -1 ? "만관" : "-",
-                    ])
-                  : "-"
-                : ryuukyokuTypeOptions.find((r) => r.value === round.ryuukyokuType)
-                    ?.label ?? "-"
-              : round.agari.flatMap((_, index) =>
-                  round.han[index] >= 13
-                    ? [
-                        index > 0 ? <br /> : "",
-                        round.kazoe?.[index]
-                          ? " 헤아림 역만"
-                          : round.han[index] === 13
-                          ? " 역만"
-                          : " " + Math.floor(round.han[index] / 13) + "배 역만",
-                      ]
-                    : round.han[index] > 4
-                    ? [index > 0 ? <br /> : "", round.han[index] + "판"]
-                    : [
-                        index > 0 ? <br /> : "",
-                        round.fu[index] + "부 " + round.han[index] + "판",
-                      ]
-                ),
+          render: (round: Round) => <FuHan mode={mode} round={round} />,
         },
         {
           title: "패",
           dataIndex: "hai",
-          render: (hai: string[]) => (
-            <Space direction="vertical">
-              {hai.map((h, i) => (
-                <Space key={h + i} direction="horizontal">
-                  {h
-                    .split("|")
-                    .filter(Boolean)
-                    .map((hh, i) => (
-                      <Mahgen key={hh + i} sequence={hh} size="small" />
-                    ))}
-                </Space>
-              ))}
-            </Space>
-          ),
+          render: (hai: string[]) => <Hai hai={hai} />,
         },
         {
           title: "삭제",
@@ -212,7 +174,9 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           ),
         },
       ]}
-      rowKey={(round) => [round.ba, round.kyoku, round.honba, ...round.hai].join()}
+      rowKey={(round) =>
+        [round.ba, round.kyoku, round.honba, ...round.hai].join()
+      }
     />
   );
 };
