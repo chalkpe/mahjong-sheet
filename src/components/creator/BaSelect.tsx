@@ -24,7 +24,7 @@ const BaKyokuHonba: FC<BaKyokuHonbaProps> = ({ mode, ba, setBa, kyoku, setKyoku,
           setKyoku(1);
           setHonba(0);
         }}
-        style={{ width: 70 }}
+        style={{ width: 60 }}
         options={windOptions}
       />
       <Select
@@ -45,6 +45,7 @@ const BaKyokuHonba: FC<BaKyokuHonbaProps> = ({ mode, ba, setBa, kyoku, setKyoku,
         min={0}
         defaultValue={0}
         suffix="본장"
+        style={{ width: 70 }}
       />
     </Space>
   );
