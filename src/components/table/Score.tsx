@@ -24,7 +24,7 @@ const Score: FC<ScoreProps> = ({ wind, value, index, data, setData }) => {
         },
       }}
     >
-      {value}
+      {value.toLocaleString()}
     </Typography.Text>
   );
 }
