@@ -17,10 +17,10 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
 
   const [focus, setFocus] = useState<"menzen" | "furo" | "agari">();
 
-  useEffect(
-    () => onChange(`${menzen}|${furo}|${agari}`),
-    [menzen, furo, agari, onChange]
-  );
+  useEffect(() => {
+    `${menzenStr}|${furoStr}|${agariStr}` !== `${menzen}|${furo}|${agari}` &&
+      onChange(`${menzen}|${furo}|${agari}`);
+  }, [menzen, furo, agari, onChange, menzenStr, furoStr, agariStr]);
 
   const onInput = useCallback(
     (tile: string) => {
@@ -31,14 +31,11 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
     [focus]
   );
 
-  const onDelete = useCallback(
-    () => {
-      if (focus === "menzen") setMenzen((prev) => prev.slice(0, -2));
-      if (focus === "furo") setFuro((prev) => prev.slice(0, -2));
-      if (focus === "agari") setAgari((prev) => prev.slice(0, -2));
-    },
-    [focus]
-  );
+  const onDelete = useCallback(() => {
+    if (focus === "menzen") setMenzen((prev) => prev.slice(0, -2));
+    if (focus === "furo") setFuro((prev) => prev.slice(0, -2));
+    if (focus === "agari") setAgari((prev) => prev.slice(0, -2));
+  }, [focus]);
 
   return (
     <Space direction="vertical">
@@ -50,6 +47,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
             onFocus={() => setFocus("menzen")}
             onBlur={(e) => e.relatedTarget === null && e.target.focus()}
             allowClear
+            style={{ width: 380 }}
           />
         </Form.Item>
         <Form.Item label="후로">
@@ -59,6 +57,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
             onFocus={() => setFocus("furo")}
             onBlur={(e) => e.relatedTarget === null && e.target.focus()}
             allowClear
+            style={{ width: 380 }}
           />
         </Form.Item>
         <Form.Item label="오름패">
@@ -68,6 +67,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
             onFocus={() => setFocus("agari")}
             onBlur={(e) => e.relatedTarget === null && e.target.focus()}
             allowClear
+            style={{ width: 65 }}
           />
         </Form.Item>
       </Form>

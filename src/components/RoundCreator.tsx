@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -72,13 +72,6 @@ const RoundCreator: FC<RoundCreatorProps> = ({
     setHan([]);
     setHai([]);
   }, []);
-
-  useEffect(() => {
-    setBa("east");
-    setKyoku(1);
-    setHonba(0);
-    reset();
-  }, [mode, reset]);
 
   const create = useCallback(() => {
     onCreated({

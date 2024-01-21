@@ -24,18 +24,18 @@ const MahjongKeyboard: FC<MahjongKeyboardProps> = ({ onInput, onDelete }) => {
           icon={<ArrowLeftOutlined />}
           onClick={() => onDelete()}
           onFocus={(e) => {
-            e.target.blur()
-            if (e.relatedTarget instanceof HTMLElement) e.relatedTarget.focus()
+            e.target.blur();
+            if (e.relatedTarget instanceof HTMLElement) e.relatedTarget.focus();
           }}
         />
       }
       style={{ width: "fit-content" }}
     >
       <Flex vertical>
-        {layout.map((line) => (
-          <Space>
+        {layout.map((line, i) => (
+          <Space key={i}>
             {line.map((tile) => (
-              <article onClick={() => onInput(tile)}>
+              <article key={tile} onClick={() => onInput(tile)}>
                 <Mahgen sequence={tile} size="small" />
               </article>
             ))}
