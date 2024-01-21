@@ -8,6 +8,7 @@ import Score from "./table/Score";
 
 import { translateAgariType } from "../types/agari";
 import { Mode } from "../types/mode";
+import { Names } from "../types/names";
 import { Round } from "../types/round";
 import { translateWind } from "../types/wind";
 
@@ -15,7 +16,7 @@ interface RoundTableProps {
   mode: Mode;
   data: Round[];
   setData: (data: Round[]) => void;
-  names: [string, string, string, string];
+  names: Names;
 }
 
 const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {

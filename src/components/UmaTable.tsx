@@ -2,6 +2,7 @@ import { FC, useMemo } from "react";
 import { Table, Typography } from "antd";
 
 import { UmaMode } from "../types/mode";
+import { Names } from "../types/names";
 import { Round } from "../types/round";
 import { windsForMode } from "../types/wind";
 
@@ -16,7 +17,7 @@ const renderScore = (score: number) =>
 interface UmaTableProps {
   mode: UmaMode;
   round: Round;
-  names: [string, string, string, string];
+  names: Names;
 }
 
 const UmaTable: FC<UmaTableProps> = ({ mode, round, names }) => {

@@ -1,7 +1,11 @@
 import "./App.css";
 
 import { Button, Card, Form, Segmented, Space, message } from "antd";
-import { ExportOutlined, GithubOutlined, ImportOutlined } from "@ant-design/icons";
+import {
+  ExportOutlined,
+  GithubOutlined,
+  ImportOutlined,
+} from "@ant-design/icons";
 import useLocalStorage from "use-local-storage";
 
 import NameEdit from "./components/NameEdit";
@@ -9,16 +13,13 @@ import UmaTable from "./components/UmaTable";
 import RoundTable from "./components/RoundTable";
 import RoundCreator from "./components/RoundCreator";
 
+import { Mode } from "./types/mode";
 import { Round } from "./types/round";
+import { Names, defaultNames } from "./types/names";
 
 function App() {
-  const [mode, setMode] = useLocalStorage<2 | 3 | 4>("mode", 4);
-
-  const [names, setNames] = useLocalStorage<[string, string, string, string]>(
-    "names",
-    ["동가", "남가", "서가", "북가"]
-  );
-
+  const [mode, setMode] = useLocalStorage<Mode>("mode", 4);
+  const [names, setNames] = useLocalStorage<Names>("names", defaultNames);
   const [data, setData] = useLocalStorage<Round[]>("data", []);
 
   return (
@@ -72,7 +73,7 @@ function App() {
             <Segmented
               options={["2인", "3인", "4인"]}
               value={mode + "인"}
-              onChange={(v) => setMode(parseInt(v.toString()[0]) as 2 | 3 | 4)}
+              onChange={(v) => setMode(parseInt(v.toString()[0]) as Mode)}
             />
           </Form.Item>
           <Form.Item label="닉네임">

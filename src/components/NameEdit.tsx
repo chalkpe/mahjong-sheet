@@ -1,5 +1,8 @@
-import { Descriptions, Typography } from "antd";
 import { FC } from "react";
+import { Descriptions, Typography } from "antd";
+
+import { Mode } from "../types/mode";
+import { Names } from "../types/names";
 
 const labels = {
   4: ["東", "南", "西", "北"],
@@ -7,10 +10,8 @@ const labels = {
   2: ["東", "西"],
 };
 
-type Names = [string, string, string, string];
-
 interface NameEditProps {
-  mode: 2 | 3 | 4;
+  mode: Mode;
   value: Names;
   onChange: (value: Names) => void;
 }

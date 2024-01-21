@@ -11,11 +11,12 @@ import {
   translateAgariType,
 } from "../../types/agari";
 import { Mode } from "../../types/mode";
+import { Names } from "../../types/names";
 import { Wind, windsForMode } from "../../types/wind";
 
 interface AgariCardProps {
   mode: Mode;
-  names: [string, string, string, string];
+  names: Names;
   type: AgariType;
   ryuukyokuType: RyuukyokuType | undefined;
   agari: Wind[];

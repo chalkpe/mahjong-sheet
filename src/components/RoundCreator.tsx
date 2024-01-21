@@ -1,17 +1,19 @@
 import { FC, useCallback, useMemo, useState } from "react";
 import { Button, Card, Form, Space } from "antd";
 
+import AgariCard from "./creator/AgariCard";
 import BaSelect from "./creator/BaSelect";
 import TypeSelect from "./creator/TypeSelect";
 
+import { AgariType, RyuukyokuType } from "../types/agari";
+import { Mode } from "../types/mode";
+import { Names } from "../types/names";
 import { Round } from "../types/round";
 import { Wind } from "../types/wind";
-import { AgariType, RyuukyokuType } from "../types/agari";
-import AgariCard from "./creator/AgariCard";
 
 interface RoundCreatorProps {
-  mode: 2 | 3 | 4;
-  names: [string, string, string, string];
+  mode: Mode;
+  names: Names;
   lastRound?: Round;
   onCreated: (round: Round) => void;
 }
