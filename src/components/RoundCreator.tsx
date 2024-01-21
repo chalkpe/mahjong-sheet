@@ -307,7 +307,7 @@ const RoundCreator: FC<RoundCreatorProps> = ({
                         {han[index] >= 13 && (
                           <>
                             <Checkbox
-                              value={kazoe[index]}
+                              checked={kazoe[index]}
                               onChange={(e) => {
                                 const newKazoe = [...kazoe];
                                 newKazoe[index] = e.target.checked;

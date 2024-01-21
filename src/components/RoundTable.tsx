@@ -213,7 +213,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           ),
         },
       ]}
-      rowKey={(round) => round.ba + round.kyoku + round.honba}
+      rowKey={(round, index) => round.ba + round.kyoku + round.honba + index}
     />
   );
 };
