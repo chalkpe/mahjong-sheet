@@ -4,7 +4,7 @@ import { InputNumber, Select, Space } from "antd";
 import { Mode } from "../../types/mode";
 import { Wind, windOptions } from "../../types/wind";
 
-interface BaKyokuHonbaProps {
+interface BaSelect {
   mode: Mode;
   ba: Wind;
   setBa: Dispatch<SetStateAction<Wind>>;
@@ -14,7 +14,15 @@ interface BaKyokuHonbaProps {
   setHonba: Dispatch<SetStateAction<number>>;
 }
 
-const BaKyokuHonba: FC<BaKyokuHonbaProps> = ({ mode, ba, setBa, kyoku, setKyoku, honba, setHonba }) => {
+const BaSelect: FC<BaSelect> = ({
+  mode,
+  ba,
+  setBa,
+  kyoku,
+  setKyoku,
+  honba,
+  setHonba,
+}) => {
   return (
     <Space>
       <Select
@@ -51,4 +59,4 @@ const BaKyokuHonba: FC<BaKyokuHonbaProps> = ({ mode, ba, setBa, kyoku, setKyoku,
   );
 };
 
-export default BaKyokuHonba;
+export default BaSelect;

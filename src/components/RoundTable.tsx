@@ -1,15 +1,15 @@
 import { FC } from "react";
 import { Button, Table } from "antd";
 
+import Ba from "./table/Ba";
 import FuHan from "./table/FuHan";
+import Hai from "./table/Hai";
 import Score from "./table/Score";
-import ScoreChecker from "./table/ScoreChecker";
 
 import { translateAgariType } from "../types/agari";
 import { Mode } from "../types/mode";
 import { Round } from "../types/round";
 import { translateWind } from "../types/wind";
-import Hai from "./table/Hai";
 
 interface RoundTableProps {
   mode: Mode;
@@ -28,24 +28,12 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
         {
           title: "장/국/본장",
           width: 130,
-          render: (round: Round) => (
-            <>
-              {translateWind(round.ba, 4)}
-              {round.kyoku}국 {round.honba}
-              본장{" "}
-              {mode === 3 && (
-                <ScoreChecker
-                  sum={round.east + round.south + round.west}
-                  expected={105000}
-                />
-              )}
-              {mode === 4 && (
-                <ScoreChecker
-                  sum={round.east + round.south + round.west + round.north}
-                  expected={100000}
-                />
-              )}
-            </>
+          render: (round: Round, _, index) => (
+            <Ba mode={mode} round={round} setRound={(round) => {
+              const newData = [...data];
+              newData[index] = typeof round === "function" ? round(newData[index]) : round;
+              setData(newData);
+            }} />
           ),
         },
         {
