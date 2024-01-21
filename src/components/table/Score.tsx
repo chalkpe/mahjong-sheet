@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { Typography } from "antd";
-import { Round, Wind } from "../types/round";
+
+import { Round } from "../../types/round";
+import { Wind } from "../../types/wind";
 
 interface ScoreProps {
   wind: Wind;

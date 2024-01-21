@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { Form, Input, Space } from "antd";
-import Mahgen from "./Mahgen";
+import Mahgen from "../Mahgen";
 import MahjongKeyboard from "./MahjongKeyboard";
 
 interface MahjongInputProps {

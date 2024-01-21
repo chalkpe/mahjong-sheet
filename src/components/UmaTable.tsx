@@ -1,6 +1,9 @@
 import { FC, useMemo } from "react";
 import { Table, Typography } from "antd";
-import { Round, winds } from "../types/round";
+
+import { UmaMode } from "../types/mode";
+import { Round } from "../types/round";
+import { windsForMode } from "../types/wind";
 
 const uma = {
   3: [15, 0, -15],
@@ -11,7 +14,7 @@ const renderScore = (score: number) =>
   (score > 0 ? "+" : "") + score.toFixed(1);
 
 interface UmaTableProps {
-  mode: 3 | 4;
+  mode: UmaMode;
   round: Round;
   names: [string, string, string, string];
 }
@@ -42,7 +45,8 @@ const UmaTable: FC<UmaTableProps> = ({ mode, round, names }) => {
         .sort(
           (a, b) =>
             b.score - a.score ||
-            winds[mode].indexOf(a.wind) - winds[mode].indexOf(b.wind)
+            windsForMode[mode].indexOf(a.wind) -
+              windsForMode[mode].indexOf(b.wind)
         )
         .map((s, i) => ({
           wind: s.wind,
@@ -50,14 +54,16 @@ const UmaTable: FC<UmaTableProps> = ({ mode, round, names }) => {
           score: (s.score - (mode === 3 ? 35000 : 25000)) / 1000 + uma[mode][i],
         }))
         .sort(
-          (a, b) => winds[mode].indexOf(a.wind) - winds[mode].indexOf(b.wind)
+          (a, b) =>
+            windsForMode[mode].indexOf(a.wind) -
+            windsForMode[mode].indexOf(b.wind)
         ),
     [base, mode]
   );
 
   return scores ? (
     <Table
-      style={{ width: 'fit-content' }}
+      style={{ width: "fit-content" }}
       bordered
       pagination={false}
       columns={[
@@ -65,7 +71,9 @@ const UmaTable: FC<UmaTableProps> = ({ mode, round, names }) => {
           title: "",
           dataIndex: "title",
           width: 130,
-          render: (title: string) => <Typography.Text strong>{title}</Typography.Text>,
+          render: (title: string) => (
+            <Typography.Text strong>{title}</Typography.Text>
+          ),
         },
         {
           title: names[0],

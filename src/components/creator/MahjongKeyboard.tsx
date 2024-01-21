@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button, Card, Flex, Space } from "antd";
-import Mahgen from "./Mahgen";
+import Mahgen from "../Mahgen";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const layout = [
@@ -29,7 +29,7 @@ const MahjongKeyboard: FC<MahjongKeyboardProps> = ({ onInput, onDelete }) => {
           }}
         />
       }
-      style={{ width: "fit-content" }}
+      style={{ minWidth: "470px", width: 'fit-content' }}
     >
       <Flex vertical>
         {layout.map((line, i) => (

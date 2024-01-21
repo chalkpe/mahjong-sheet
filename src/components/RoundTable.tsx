@@ -1,17 +1,16 @@
 import { FC } from "react";
 import { Button, Space, Table } from "antd";
 import Mahgen from "./Mahgen";
-import Score from "./Score";
-import ScoreChecker from "./ScoreChecker";
-import {
-  Round,
-  ryuukyokuTypes,
-  translateType,
-  translateWind,
-} from "../types/round";
+import Score from "./table/Score";
+import ScoreChecker from "./table/ScoreChecker";
+
+import { ryuukyokuTypeOptions, translateAgariType } from "../types/agari";
+import { Mode } from "../types/mode";
+import { Round } from "../types/round";
+import { translateWind } from "../types/wind";
 
 interface RoundTableProps {
-  mode: 2 | 3 | 4;
+  mode: Mode;
   data: Round[];
   setData: (data: Round[]) => void;
   names: [string, string, string, string];
@@ -136,7 +135,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           render: (type: Round["type"], round: Round) =>
             (type === "ron"
               ? ["", "", "더블 ", "트리플 "][round.agari.length]
-              : "") + translateType(type),
+              : "") + translateAgariType(type),
         },
         {
           title: "방총",
@@ -158,7 +157,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
                       round.han[index] === -1 ? "만관" : "-",
                     ])
                   : "-"
-                : ryuukyokuTypes.find((r) => r.value === round.ryuukyokuType)
+                : ryuukyokuTypeOptions.find((r) => r.value === round.ryuukyokuType)
                     ?.label ?? "-"
               : round.agari.flatMap((_, index) =>
                   round.han[index] >= 13
