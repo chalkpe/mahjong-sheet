@@ -12,7 +12,6 @@ import {
   Typography,
 } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import Mahgen from "./Mahgen";
 import MahjongInput from "./MahjongInput";
 import {
   AgariType,
@@ -131,278 +130,267 @@ const RoundCreator: FC<RoundCreatorProps> = ({
       }
     >
       <Space direction="vertical">
-        <Form>
-          <Form.Item label="장/국/본장">
-            <Space>
-              <Select
-                value={ba}
-                onChange={(b) => {
-                  setBa(b);
-                  setKyoku(1);
-                  setHonba(0);
-                }}
-                style={{ width: 70 }}
-                options={[
-                  { label: "동", value: "east" },
-                  { label: "남", value: "south" },
-                  { label: "서", value: "west" },
-                  { label: "북", value: "north" },
-                ]}
-              />
-              <Select
-                value={kyoku}
-                onChange={(k) => {
-                  setKyoku(k);
-                  setHonba(0);
-                }}
-                style={{ width: 70 }}
-                options={[1, 2, 3, 4]
-                  .slice(0, mode)
-                  .map((i) => ({ label: `${i}국`, value: i }))}
-              />
+        <Form.Item label="장/국/본장">
+          <Space>
+            <Select
+              value={ba}
+              onChange={(b) => {
+                setBa(b);
+                setKyoku(1);
+                setHonba(0);
+              }}
+              style={{ width: 70 }}
+              options={[
+                { label: "동", value: "east" },
+                { label: "남", value: "south" },
+                { label: "서", value: "west" },
+                { label: "북", value: "north" },
+              ]}
+            />
+            <Select
+              value={kyoku}
+              onChange={(k) => {
+                setKyoku(k);
+                setHonba(0);
+              }}
+              style={{ width: 70 }}
+              options={[1, 2, 3, 4]
+                .slice(0, mode)
+                .map((i) => ({ label: `${i}국`, value: i }))}
+            />
 
-              <InputNumber
-                value={honba}
-                onChange={(v) => v !== null && setHonba(v)}
-                min={0}
-                defaultValue={0}
-                suffix="본장"
-              />
-            </Space>
-          </Form.Item>
+            <InputNumber
+              value={honba}
+              onChange={(v) => v !== null && setHonba(v)}
+              min={0}
+              defaultValue={0}
+              suffix="본장"
+            />
+          </Space>
+        </Form.Item>
 
-          <Form.Item label="화료 유형">
-            <Space>
-              <Select
-                value={type}
-                onChange={(type) => {
-                  setType(type);
-                  setAgari([]);
-                  setHoujuu(undefined);
-                }}
-                style={{ width: 70 }}
-                options={[
-                  { label: "쯔모", value: "tsumo" },
-                  { label: "론", value: "ron" },
-                  { label: "유국", value: "ryuukyoku" },
-                ]}
-              />
+        <Form.Item label="화료 유형">
+          <Space>
+            <Select
+              value={type}
+              onChange={(type) => {
+                setType(type);
+                setAgari([]);
+                setHoujuu(undefined);
+              }}
+              style={{ width: 70 }}
+              options={[
+                { label: "쯔모", value: "tsumo" },
+                { label: "론", value: "ron" },
+                { label: "유국", value: "ryuukyoku" },
+              ]}
+            />
 
-              {type === "tsumo" ? (
-                <Radio.Group
-                  value={agari[0]}
-                  onChange={(e) => setAgari([e.target.value])}
-                >
-                  {names.slice(0, mode).map((name, index) => (
-                    <Radio key={winds[mode][index]} value={winds[mode][index]}>
-                      {name}
-                    </Radio>
-                  ))}
-                </Radio.Group>
-              ) : (
-                <>
-                  {type === "ron" && (
-                    <Select
-                      value={houjuu}
-                      onChange={(h) => {
-                        setHoujuu(h);
-                        setAgari([]);
-                      }}
-                      placeholder="방총"
-                      style={{ width: 120 }}
-                      options={names.slice(0, mode).map((name, index) => ({
-                        label: name + " 방총",
-                        value: winds[mode][index],
-                      }))}
-                    />
-                  )}
-                  {type === "ryuukyoku" && (
-                    <Select
-                      value={ryuukyokuType}
-                      onChange={(r) => {
-                        setRyuukyokuType(r);
-                        setAgari([]);
-                      }}
-                      placeholder="유형"
-                      style={{ width: 120 }}
-                      options={ryuukyokuTypes}
-                    />
-                  )}
+            {type === "tsumo" ? (
+              <Radio.Group
+                value={agari[0]}
+                onChange={(e) => setAgari([e.target.value])}
+              >
+                {names.slice(0, mode).map((name, index) => (
+                  <Radio key={winds[mode][index]} value={winds[mode][index]}>
+                    {name}
+                  </Radio>
+                ))}
+              </Radio.Group>
+            ) : (
+              <>
+                {type === "ron" && (
+                  <Select
+                    value={houjuu}
+                    onChange={(h) => {
+                      setHoujuu(h);
+                      setAgari([]);
+                    }}
+                    placeholder="방총"
+                    style={{ width: 120 }}
+                    options={names.slice(0, mode).map((name, index) => ({
+                      label: name + " 방총",
+                      value: winds[mode][index],
+                    }))}
+                  />
+                )}
+                {type === "ryuukyoku" && (
+                  <Select
+                    value={ryuukyokuType}
+                    onChange={(r) => {
+                      setRyuukyokuType(r);
+                      setAgari([]);
+                    }}
+                    placeholder="유형"
+                    style={{ width: 120 }}
+                    options={ryuukyokuTypes}
+                  />
+                )}
 
-                  {(type === "ron" ||
-                    (type === "ryuukyoku" &&
-                      (ryuukyokuType === "ryuukyoku" ||
-                        ryuukyokuType === "kyuushuukyuuhai"))) && (
-                    <Checkbox.Group
-                      value={agari}
-                      disabled={type === "ron" && houjuu === undefined}
-                      onChange={(v) => {
-                        const a = v as Wind[];
-                        setAgari(
-                          winds[mode].filter((wind) =>
-                            a.includes(wind as Wind)
-                          ) as Wind[]
-                        );
-                        setFu([]);
-                        setHan([]);
-                        setHai(Array(a.length).fill(""));
-                      }}
-                    >
-                      {winds[mode]
-                        .filter((wind) => wind !== houjuu)
-                        .map((wind) => (
-                          <Checkbox key={wind} value={wind}>
-                            {names[winds[mode].indexOf(wind)]}
-                          </Checkbox>
-                        ))}
-                    </Checkbox.Group>
-                  )}
-                </>
-              )}
-            </Space>
-          </Form.Item>
-
-          <Space direction="vertical">
-            {type === "ryuukyoku" && ryuukyokuType === "ryuukyoku"
-              ? agari.map((wind, index) => (
-                  <Card key={wind} title={names[winds[mode].indexOf(wind)]}>
-                    <Form.Item label="유국만관">
-                      <Checkbox
-                        value={han[index] === -1}
-                        onChange={(e) => {
-                          const newHan = [...han];
-                          newHan[index] = e.target.checked ? -1 : 0;
-                          setHan(newHan);
-                        }}
-                      />
-                    </Form.Item>
-                  </Card>
-                ))
-              : agari.map((wind, index) => (
-                  <Card
-                    key={wind}
-                    title={`${names[winds[mode].indexOf(wind)]} ${translateType(
-                      type
-                    )}`}
+                {(type === "ron" ||
+                  (type === "ryuukyoku" &&
+                    (ryuukyokuType === "ryuukyoku" ||
+                      ryuukyokuType === "kyuushuukyuuhai"))) && (
+                  <Checkbox.Group
+                    value={agari}
+                    disabled={type === "ron" && houjuu === undefined}
+                    onChange={(v) => {
+                      const a = v as Wind[];
+                      setAgari(
+                        winds[mode].filter((wind) =>
+                          a.includes(wind as Wind)
+                        ) as Wind[]
+                      );
+                      setFu([]);
+                      setHan([]);
+                      setHai(Array(a.length).fill(""));
+                    }}
                   >
-                    {type !== "ryuukyoku" && (
-                      <Form.Item label="부판">
-                        <Space>
-                          {(!han[index] || han[index] <= 4) && (
-                            <InputNumber
-                              value={fu[index]}
-                              onChange={(v) => {
-                                if (v === null) return;
-                                const newFu = [...fu];
-                                newFu[index] = v;
-                                setFu(newFu);
-                              }}
-                              min={20}
-                              step={5}
-                              suffix="부"
-                            />
-                          )}
+                    {winds[mode]
+                      .filter((wind) => wind !== houjuu)
+                      .map((wind) => (
+                        <Checkbox key={wind} value={wind}>
+                          {names[winds[mode].indexOf(wind)]}
+                        </Checkbox>
+                      ))}
+                  </Checkbox.Group>
+                )}
+              </>
+            )}
+          </Space>
+        </Form.Item>
+
+        <Space direction="vertical">
+          {type === "ryuukyoku" && ryuukyokuType === "ryuukyoku"
+            ? agari.map((wind, index) => (
+                <Card key={wind} title={names[winds[mode].indexOf(wind)]}>
+                  <Form.Item label="유국만관">
+                    <Checkbox
+                      value={han[index] === -1}
+                      onChange={(e) => {
+                        const newHan = [...han];
+                        newHan[index] = e.target.checked ? -1 : 0;
+                        setHan(newHan);
+                      }}
+                    />
+                  </Form.Item>
+                </Card>
+              ))
+            : agari.map((wind, index) => (
+                <Card
+                  key={wind}
+                  title={`${names[winds[mode].indexOf(wind)]} ${translateType(
+                    type
+                  )}`}
+                >
+                  {type !== "ryuukyoku" && (
+                    <Form.Item label="부판">
+                      <Space>
+                        {(!han[index] || han[index] <= 4) && (
                           <InputNumber
-                            value={han[index]}
+                            value={fu[index]}
                             onChange={(v) => {
                               if (v === null) return;
-                              const newHan = [...han];
-                              newHan[index] = v;
-                              setHan(newHan);
+                              const newFu = [...fu];
+                              newFu[index] = v;
+                              setFu(newFu);
                             }}
-                            min={1}
-                            suffix="판"
+                            min={20}
+                            step={5}
+                            suffix="부"
                           />
-                          {han[index] >= 13 && (
-                            <>
-                              <Checkbox
-                                value={kazoe[index]}
-                                onChange={(e) => {
-                                  const newKazoe = [...kazoe];
-                                  newKazoe[index] = e.target.checked;
-                                  setKazoe(newKazoe);
-                                }}
-                              >
-                                헤아림 역만?
-                              </Checkbox>
-                            </>
-                          )}
-                        </Space>
-                      </Form.Item>
-                    )}
-                    <Form.Item
-                      label={
-                        <>
-                          {type === "ryuukyoku" ? "패" : "화료패"}
-                          <Tooltip
-                            placement="right"
-                            color="#fff"
-                            title={
-                              <Typography>
-                                <Typography.Paragraph>
-                                  <Typography.Title level={5}>
-                                    설명
-                                  </Typography.Title>
-                                  1만~9만은{" "}
-                                  <Typography.Text code>1m~9m</Typography.Text>,
-                                  1통~9통은{" "}
-                                  <Typography.Text code>1p~9p</Typography.Text>,
-                                  1삭~9삭은{" "}
-                                  <Typography.Text code>1s~9s</Typography.Text>,
-                                  동남서북백발중은{" "}
-                                  <Typography.Text code>1z~7z</Typography.Text>,
-                                  적색 5만, 적색 5통 적색 5삭은 각각{" "}
-                                  <Typography.Text code>
-                                    0m, 0p, 0s
-                                  </Typography.Text>
-                                  로, 뒤집힌 패는{" "}
-                                  <Typography.Text code>0z</Typography.Text>로
-                                  입력하면 됩니다.
-                                </Typography.Paragraph>
-                                <Typography.Paragraph>
-                                  <Typography.Title level={5}>
-                                    예시
-                                  </Typography.Title>
-                                  녹일색:{" "}
-                                  <Typography.Text code>
-                                    22233344488s666z
-                                  </Typography.Text>
-                                  <br />
-                                  국사무쌍:{" "}
-                                  <Typography.Text code>
-                                    19m19p19s12345677z
-                                  </Typography.Text>
-                                </Typography.Paragraph>
-                              </Typography>
-                            }
-                          >
-                            <QuestionCircleOutlined />
-                          </Tooltip>
-                        </>
-                      }
-                    >
-                      <Space direction="vertical">
-                        <MahjongInput
-                          value={hai[index]}
-                          onChange={(h) => {
-                            const newHai = [...hai];
-                            newHai[index] = h;
-                            setHai(newHai);
+                        )}
+                        <InputNumber
+                          value={han[index]}
+                          onChange={(v) => {
+                            if (v === null) return;
+                            const newHan = [...han];
+                            newHan[index] = v;
+                            setHan(newHan);
                           }}
+                          min={1}
+                          suffix="판"
                         />
-                        <Mahgen
-                          sequence={
-                            hai[index] && hai[index] !== "||"
-                              ? hai[index]
-                              : "0000000000000z|0z"
-                          }
-                        />
+                        {han[index] >= 13 && (
+                          <>
+                            <Checkbox
+                              value={kazoe[index]}
+                              onChange={(e) => {
+                                const newKazoe = [...kazoe];
+                                newKazoe[index] = e.target.checked;
+                                setKazoe(newKazoe);
+                              }}
+                            >
+                              헤아림 역만?
+                            </Checkbox>
+                          </>
+                        )}
                       </Space>
                     </Form.Item>
-                  </Card>
-                ))}
-          </Space>
-        </Form>
+                  )}
+                  <Form.Item
+                    label={
+                      <>
+                        {type === "ryuukyoku" ? "패" : "화료패"}
+                        <Tooltip
+                          placement="right"
+                          color="#fff"
+                          title={
+                            <Typography>
+                              <Typography.Paragraph>
+                                <Typography.Title level={5}>
+                                  설명
+                                </Typography.Title>
+                                1만~9만은{" "}
+                                <Typography.Text code>1m~9m</Typography.Text>,
+                                1통~9통은{" "}
+                                <Typography.Text code>1p~9p</Typography.Text>,
+                                1삭~9삭은{" "}
+                                <Typography.Text code>1s~9s</Typography.Text>,
+                                동남서북백발중은{" "}
+                                <Typography.Text code>1z~7z</Typography.Text>,
+                                적색 5만, 적색 5통 적색 5삭은 각각{" "}
+                                <Typography.Text code>
+                                  0m, 0p, 0s
+                                </Typography.Text>
+                                로, 뒤집힌 패는{" "}
+                                <Typography.Text code>0z</Typography.Text>로
+                                입력하면 됩니다.
+                              </Typography.Paragraph>
+                              <Typography.Paragraph>
+                                <Typography.Title level={5}>
+                                  예시
+                                </Typography.Title>
+                                녹일색:{" "}
+                                <Typography.Text code>
+                                  22233344488s666z
+                                </Typography.Text>
+                                <br />
+                                국사무쌍:{" "}
+                                <Typography.Text code>
+                                  19m19p19s12345677z
+                                </Typography.Text>
+                              </Typography.Paragraph>
+                            </Typography>
+                          }
+                        >
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </>
+                    }
+                  >
+                    <MahjongInput
+                      value={hai[index]}
+                      onChange={(h) => {
+                        const newHai = [...hai];
+                        newHai[index] = h;
+                        setHai(newHai);
+                      }}
+                    />
+                  </Form.Item>
+                </Card>
+              ))}
+        </Space>
       </Space>
     </Card>
   );

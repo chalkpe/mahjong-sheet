@@ -183,13 +183,13 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           dataIndex: "hai",
           render: (hai: string[]) => (
             <Space direction="vertical">
-              {hai.map((h) => (
-                <Space direction="horizontal">
+              {hai.map((h, i) => (
+                <Space key={h + i} direction="horizontal">
                   {h
                     .split("|")
                     .filter(Boolean)
-                    .map((hh) => (
-                      <Mahgen sequence={hh} size="small" />
+                    .map((hh, i) => (
+                      <Mahgen key={hh + i} sequence={hh} size="small" />
                     ))}
                 </Space>
               ))}
@@ -213,6 +213,7 @@ const RoundTable: FC<RoundTableProps> = ({ mode, data, setData, names }) => {
           ),
         },
       ]}
+      rowKey={(round) => round.ba + round.kyoku + round.honba}
     />
   );
 };
