@@ -4,7 +4,7 @@ import ScoreChecker from "./ScoreChecker";
 import { Mode } from "../../types/mode";
 import { Round } from "../../types/round";
 import { translateWind, windOptions } from "../../types/wind";
-import { InputNumber, Select, Space } from "antd";
+import { InputNumber, Select, Space, Typography } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
 
 interface BaProps {
@@ -57,7 +57,7 @@ const Ba: FC<BaProps> = ({ mode, round, setRound }) => {
         <CheckOutlined
           onClick={() => {
             setIsEditing(false);
-            setRound((round) => ({ ...round, ba, kyoku, honba  }));
+            setRound((round) => ({ ...round, ba, kyoku, honba }));
           }}
         />
       </Space>
@@ -69,6 +69,11 @@ const Ba: FC<BaProps> = ({ mode, round, setRound }) => {
       {translateWind(round.ba, 4)}
       {round.kyoku}국 {round.honba}
       본장{" "}
+      {mode === 2 && (
+        <Typography.Text type="success" onClick={() => setIsEditing(true)}>
+          ●
+        </Typography.Text>
+      )}
       {mode === 3 && (
         <ScoreChecker
           sum={round.east + round.south + round.west}
