@@ -1,14 +1,14 @@
-import { Checkbox, Form, InputNumber, Space } from "antd";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction } from 'react'
+import { Checkbox, Form, InputNumber, Space } from 'antd'
 
 interface FuHanInputProps {
-  index: number;
-  fu: number[];
-  setFu: Dispatch<SetStateAction<number[]>>;
-  han: number[];
-  setHan: Dispatch<SetStateAction<number[]>>;
-  kazoe: boolean[];
-  setKazoe: Dispatch<SetStateAction<boolean[]>>;
+  index: number
+  fu: number[]
+  setFu: Dispatch<SetStateAction<number[]>>
+  han: number[]
+  setHan: Dispatch<SetStateAction<number[]>>
+  kazoe: boolean[]
+  setKazoe: Dispatch<SetStateAction<boolean[]>>
 }
 
 const FuHanInput: FC<FuHanInputProps> = ({
@@ -18,7 +18,7 @@ const FuHanInput: FC<FuHanInputProps> = ({
   han,
   setHan,
   kazoe,
-  setKazoe,
+  setKazoe
 }) => {
   return (
     <Form.Item label="부판">
@@ -27,10 +27,10 @@ const FuHanInput: FC<FuHanInputProps> = ({
           <InputNumber
             value={fu[index]}
             onChange={(v) => {
-              if (v === null) return;
-              const newFu = [...fu];
-              newFu[index] = v;
-              setFu(newFu);
+              if (v === null) return
+              const newFu = [...fu]
+              newFu[index] = v
+              setFu(newFu)
             }}
             min={20}
             step={5}
@@ -40,10 +40,10 @@ const FuHanInput: FC<FuHanInputProps> = ({
         <InputNumber
           value={han[index]}
           onChange={(v) => {
-            if (v === null) return;
-            const newHan = [...han];
-            newHan[index] = v;
-            setHan(newHan);
+            if (v === null) return
+            const newHan = [...han]
+            newHan[index] = v
+            setHan(newHan)
           }}
           min={1}
           suffix="판"
@@ -53,9 +53,9 @@ const FuHanInput: FC<FuHanInputProps> = ({
             <Checkbox
               checked={kazoe[index]}
               onChange={(e) => {
-                const newKazoe = [...kazoe];
-                newKazoe[index] = e.target.checked;
-                setKazoe(newKazoe);
+                const newKazoe = [...kazoe]
+                newKazoe[index] = e.target.checked
+                setKazoe(newKazoe)
               }}
             >
               헤아림 역만?
@@ -64,7 +64,7 @@ const FuHanInput: FC<FuHanInputProps> = ({
         )}
       </Space>
     </Form.Item>
-  );
-};
+  )
+}
 
-export default FuHanInput;
+export default FuHanInput

@@ -1,32 +1,29 @@
-import { FC } from "react";
-import { Typography } from "antd";
+import { FC } from 'react'
+import { Typography } from 'antd'
 
-import { Round } from "../../types/round";
-import { Wind } from "../../types/wind";
+import { useAtomCallback } from 'jotai/utils'
+import dataAtom from '../../store/atoms/data'
+
+import { Wind } from '../../types/wind'
 
 interface ScoreProps {
-  wind: Wind;
-  value: number;
-  index: number;
-  data: Round[];
-  setData: (data: Round[]) => void;
+  wind: Wind
+  value: number
+  index: number
 }
 
-const Score: FC<ScoreProps> = ({ wind, value, index, data, setData }) => {
+const Score: FC<ScoreProps> = ({ wind, value, index }) => {
+  const onChange = useAtomCallback((get, set, value: string) => {
+    const data = [...get(dataAtom)]
+    data[index][wind] = parseInt(eval(value)) || 0
+    set(dataAtom, data)
+  })
+
   return (
-    <Typography.Text
-      editable={{
-        text: value.toString(),
-        onChange: (v) => {
-          const newData = [...data];
-          newData[index][wind] = parseInt(eval(v)) || 0;
-          setData(newData);
-        },
-      }}
-    >
+    <Typography.Text editable={{ text: value.toString(), onChange }}>
       {value.toLocaleString()}
     </Typography.Text>
-  );
+  )
 }
 
-export default Score;
+export default Score

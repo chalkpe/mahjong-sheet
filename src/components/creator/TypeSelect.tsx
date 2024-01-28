@@ -1,30 +1,33 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import { Checkbox, Radio, Select, Space } from "antd";
+import { Dispatch, FC, SetStateAction } from 'react'
+import { Checkbox, Radio, Select, Space } from 'antd'
 
-import { AgariType, RyuukyokuType, agariTypeOptions, ryuukyokuTypeOptions } from "../../types/agari";
-import { Mode } from "../../types/mode";
-import { Names } from "../../types/names";
-import { Wind, windsForMode } from "../../types/wind";
+import { useAtomValue } from 'jotai'
+import modeAtom from '../../store/atoms/mode'
+import namesAtom from '../../store/atoms/names'
+
+import {
+  AgariType,
+  RyuukyokuType,
+  agariTypeOptions,
+  ryuukyokuTypeOptions
+} from '../../types/agari'
+import { Wind, windsForMode } from '../../types/wind'
 
 interface TypeSelectProps {
-  mode: Mode;
-  names: Names;
-  type: AgariType;
-  setType: Dispatch<SetStateAction<AgariType>>;
-  ryuukyokuType: RyuukyokuType | undefined;
-  setRyuukyokuType: Dispatch<SetStateAction<RyuukyokuType | undefined>>;
-  agari: Wind[];
-  setAgari: Dispatch<SetStateAction<Wind[]>>;
-  houjuu: Wind | undefined;
-  setHoujuu: Dispatch<SetStateAction<Wind | undefined>>;
-  setFu: Dispatch<SetStateAction<number[]>>;
-  setHan: Dispatch<SetStateAction<number[]>>;
-  setHai: Dispatch<SetStateAction<string[]>>;
+  type: AgariType
+  setType: Dispatch<SetStateAction<AgariType>>
+  ryuukyokuType: RyuukyokuType | undefined
+  setRyuukyokuType: Dispatch<SetStateAction<RyuukyokuType | undefined>>
+  agari: Wind[]
+  setAgari: Dispatch<SetStateAction<Wind[]>>
+  houjuu: Wind | undefined
+  setHoujuu: Dispatch<SetStateAction<Wind | undefined>>
+  setFu: Dispatch<SetStateAction<number[]>>
+  setHan: Dispatch<SetStateAction<number[]>>
+  setHai: Dispatch<SetStateAction<string[]>>
 }
 
 const TypeSelect: FC<TypeSelectProps> = ({
-  mode,
-  names,
   type,
   setType,
   ryuukyokuType,
@@ -35,22 +38,25 @@ const TypeSelect: FC<TypeSelectProps> = ({
   setHoujuu,
   setFu,
   setHan,
-  setHai,
+  setHai
 }) => {
+  const mode = useAtomValue(modeAtom)
+  const names = useAtomValue(namesAtom)
+
   return (
     <Space>
       <Select
         value={type}
         onChange={(type) => {
-          setType(type);
-          setAgari([]);
-          setHoujuu(undefined);
+          setType(type)
+          setAgari([])
+          setHoujuu(undefined)
         }}
         style={{ width: 70 }}
         options={agariTypeOptions}
       />
 
-      {type === "tsumo" ? (
+      {type === 'tsumo' ? (
         <Radio.Group
           value={agari[0]}
           onChange={(e) => setAgari([e.target.value])}
@@ -66,27 +72,27 @@ const TypeSelect: FC<TypeSelectProps> = ({
         </Radio.Group>
       ) : (
         <>
-          {type === "ron" && (
+          {type === 'ron' && (
             <Select
               value={houjuu}
               onChange={(h) => {
-                setHoujuu(h);
-                setAgari([]);
+                setHoujuu(h)
+                setAgari([])
               }}
               placeholder="방총"
               style={{ width: 120 }}
               options={names.slice(0, mode).map((name, index) => ({
-                label: name + " 방총",
-                value: windsForMode[mode][index],
+                label: name + ' 방총',
+                value: windsForMode[mode][index]
               }))}
             />
           )}
-          {type === "ryuukyoku" && (
+          {type === 'ryuukyoku' && (
             <Select
               value={ryuukyokuType}
               onChange={(r) => {
-                setRyuukyokuType(r);
-                setAgari([]);
+                setRyuukyokuType(r)
+                setAgari([])
               }}
               placeholder="유형"
               style={{ width: 120 }}
@@ -94,23 +100,23 @@ const TypeSelect: FC<TypeSelectProps> = ({
             />
           )}
 
-          {(type === "ron" ||
-            (type === "ryuukyoku" &&
-              (ryuukyokuType === "ryuukyoku" ||
-                ryuukyokuType === "kyuushuukyuuhai"))) && (
+          {(type === 'ron' ||
+            (type === 'ryuukyoku' &&
+              (ryuukyokuType === 'ryuukyoku' ||
+                ryuukyokuType === 'kyuushuukyuuhai'))) && (
             <Checkbox.Group
               value={agari}
-              disabled={type === "ron" && houjuu === undefined}
+              disabled={type === 'ron' && houjuu === undefined}
               onChange={(v) => {
-                const a = v as Wind[];
+                const a = v as Wind[]
                 setAgari(
                   windsForMode[mode].filter((wind) =>
                     a.includes(wind as Wind)
                   ) as Wind[]
-                );
-                setFu([]);
-                setHan([]);
-                setHai(Array(a.length).fill(""));
+                )
+                setFu([])
+                setHan([])
+                setHai(Array(a.length).fill(''))
               }}
             >
               {windsForMode[mode]
@@ -125,7 +131,7 @@ const TypeSelect: FC<TypeSelectProps> = ({
         </>
       )}
     </Space>
-  );
-};
+  )
+}
 
-export default TypeSelect;
+export default TypeSelect

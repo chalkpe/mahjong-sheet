@@ -1,36 +1,38 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import { InputNumber, Select, Space } from "antd";
+import { Dispatch, FC, SetStateAction } from 'react'
+import { InputNumber, Select, Space } from 'antd'
 
-import { Mode } from "../../types/mode";
-import { Wind, windOptions } from "../../types/wind";
+import { useAtomValue } from 'jotai'
+import modeAtom from '../../store/atoms/mode'
+
+import { Wind, windOptions } from '../../types/wind'
 
 interface BaSelect {
-  mode: Mode;
-  ba: Wind;
-  setBa: Dispatch<SetStateAction<Wind>>;
-  kyoku: number;
-  setKyoku: Dispatch<SetStateAction<number>>;
-  honba: number;
-  setHonba: Dispatch<SetStateAction<number>>;
+  ba: Wind
+  setBa: Dispatch<SetStateAction<Wind>>
+  kyoku: number
+  setKyoku: Dispatch<SetStateAction<number>>
+  honba: number
+  setHonba: Dispatch<SetStateAction<number>>
 }
 
 const BaSelect: FC<BaSelect> = ({
-  mode,
   ba,
   setBa,
   kyoku,
   setKyoku,
   honba,
-  setHonba,
+  setHonba
 }) => {
+  const mode = useAtomValue(modeAtom)
+
   return (
     <Space>
       <Select
         value={ba}
         onChange={(b) => {
-          setBa(b);
-          setKyoku(1);
-          setHonba(0);
+          setBa(b)
+          setKyoku(1)
+          setHonba(0)
         }}
         style={{ width: 60 }}
         options={windOptions}
@@ -38,8 +40,8 @@ const BaSelect: FC<BaSelect> = ({
       <Select
         value={kyoku}
         onChange={(k) => {
-          setKyoku(k);
-          setHonba(0);
+          setKyoku(k)
+          setHonba(0)
         }}
         style={{ width: 70 }}
         options={[1, 2, 3, 4]
@@ -56,7 +58,7 @@ const BaSelect: FC<BaSelect> = ({
         style={{ width: 70 }}
       />
     </Space>
-  );
-};
+  )
+}
 
-export default BaSelect;
+export default BaSelect

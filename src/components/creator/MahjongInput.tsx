@@ -1,41 +1,41 @@
-import { FC, useCallback, useEffect, useState } from "react";
-import { Form, Input, Space } from "antd";
-import Mahgen from "../Mahgen";
-import MahjongKeyboard from "./MahjongKeyboard";
+import { FC, useCallback, useEffect, useState } from 'react'
+import { Form, Input, Space } from 'antd'
+import Mahgen from '../Mahgen'
+import MahjongKeyboard from './MahjongKeyboard'
 
 interface MahjongInputProps {
-  value: string;
-  onChange: (value: string) => void;
+  value: string
+  onChange: (value: string) => void
 }
 
 const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
-  const [menzenStr, furoStr, agariStr] = (value ?? "").split("|");
+  const [menzenStr, furoStr, agariStr] = (value ?? '').split('|')
 
-  const [menzen, setMenzen] = useState(menzenStr ?? "");
-  const [furo, setFuro] = useState(furoStr ?? "");
-  const [agari, setAgari] = useState(agariStr ?? "");
+  const [menzen, setMenzen] = useState(menzenStr ?? '')
+  const [furo, setFuro] = useState(furoStr ?? '')
+  const [agari, setAgari] = useState(agariStr ?? '')
 
-  const [focus, setFocus] = useState<"menzen" | "furo" | "agari">();
+  const [focus, setFocus] = useState<'menzen' | 'furo' | 'agari'>()
 
   useEffect(() => {
     `${menzenStr}|${furoStr}|${agariStr}` !== `${menzen}|${furo}|${agari}` &&
-      onChange(`${menzen}|${furo}|${agari}`);
-  }, [menzen, furo, agari, onChange, menzenStr, furoStr, agariStr]);
+      onChange(`${menzen}|${furo}|${agari}`)
+  }, [menzen, furo, agari, onChange, menzenStr, furoStr, agariStr])
 
   const onInput = useCallback(
     (tile: string) => {
-      if (focus === "menzen") setMenzen((prev) => prev + tile);
-      if (focus === "furo") setFuro((prev) => prev + tile);
-      if (focus === "agari") setAgari((prev) => prev + tile);
+      if (focus === 'menzen') setMenzen((prev) => prev + tile)
+      if (focus === 'furo') setFuro((prev) => prev + tile)
+      if (focus === 'agari') setAgari((prev) => prev + tile)
     },
     [focus]
-  );
+  )
 
   const onDelete = useCallback(() => {
-    if (focus === "menzen") setMenzen((prev) => prev.slice(0, -2));
-    if (focus === "furo") setFuro((prev) => prev.slice(0, -2));
-    if (focus === "agari") setAgari((prev) => prev.slice(0, -2));
-  }, [focus]);
+    if (focus === 'menzen') setMenzen((prev) => prev.slice(0, -2))
+    if (focus === 'furo') setFuro((prev) => prev.slice(0, -2))
+    if (focus === 'agari') setAgari((prev) => prev.slice(0, -2))
+  }, [focus])
 
   return (
     <Space direction="vertical">
@@ -44,7 +44,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
           <Input
             value={menzen}
             onChange={(e) => setMenzen(e.target.value)}
-            onFocus={() => setFocus("menzen")}
+            onFocus={() => setFocus('menzen')}
             onBlur={(e) => e.relatedTarget === null && e.target.focus()}
             allowClear
             style={{ width: 380 }}
@@ -54,7 +54,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
           <Input
             value={furo}
             onChange={(e) => setFuro(e.target.value)}
-            onFocus={() => setFocus("furo")}
+            onFocus={() => setFocus('furo')}
             onBlur={(e) => e.relatedTarget === null && e.target.focus()}
             allowClear
             style={{ width: 380 }}
@@ -64,7 +64,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
           <Input
             value={agari}
             onChange={(e) => setAgari(e.target.value)}
-            onFocus={() => setFocus("agari")}
+            onFocus={() => setFocus('agari')}
             onBlur={(e) => e.relatedTarget === null && e.target.focus()}
             allowClear
             style={{ width: 65 }}
@@ -72,7 +72,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
         </Form.Item>
       </Form>
 
-      {!value || value === "||" ? (
+      {!value || value === '||' ? (
         <Space direction="horizontal">
           <Mahgen sequence="0000000000000z" />
           <Mahgen sequence="0z" />
@@ -80,10 +80,10 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
       ) : (
         <Space direction="horizontal">
           {value
-            .split("|")
+            .split('|')
             .map((hh, i) =>
               hh || i === 2 ? (
-                <Mahgen key={hh + i} sequence={hh || "0z"} />
+                <Mahgen key={hh + i} sequence={hh || '0z'} />
               ) : undefined
             )
             .filter(Boolean)}
@@ -91,7 +91,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
       )}
       <MahjongKeyboard onInput={onInput} onDelete={onDelete} />
     </Space>
-  );
-};
+  )
+}
 
-export default MahjongInput;
+export default MahjongInput

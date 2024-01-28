@@ -1,9 +1,9 @@
-import { FC } from "react";
-import { Space } from "antd";
-import Mahgen from "../Mahgen";
+import { FC } from 'react'
+import { Space } from 'antd'
+import Mahgen from '../Mahgen'
 
 interface HaiProps {
-  hai: string[];
+  hai: string[]
 }
 
 const Hai: FC<HaiProps> = ({ hai }) => {
@@ -12,7 +12,7 @@ const Hai: FC<HaiProps> = ({ hai }) => {
       {hai.map((h, i) => (
         <Space key={h + i} direction="horizontal">
           {h
-            .split("|")
+            .split('|')
             .filter(Boolean)
             .map((hh, i) => (
               <Mahgen key={hh + i} sequence={hh} size="small" />
@@ -20,7 +20,7 @@ const Hai: FC<HaiProps> = ({ hai }) => {
         </Space>
       ))}
     </Space>
-  );
-};
+  )
+}
 
-export default Hai;
+export default Hai

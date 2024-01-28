@@ -1,38 +1,32 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import { Card, Checkbox, Form, Space } from "antd";
+import { Dispatch, FC, SetStateAction } from 'react'
+import { Card, Checkbox, Form, Space } from 'antd'
 
-import FuHanInput from "./FuHanInput";
-import MahgenTooltip from "./MahgenTooltip";
-import MahjongInput from "./MahjongInput";
+import { useAtomValue } from 'jotai'
+import modeAtom from '../../store/atoms/mode'
+import namesAtom from '../../store/atoms/names'
 
-import {
-  AgariType,
-  RyuukyokuType,
-  translateAgariType,
-} from "../../types/agari";
-import { Mode } from "../../types/mode";
-import { Names } from "../../types/names";
-import { Wind, windsForMode } from "../../types/wind";
+import FuHanInput from './FuHanInput'
+import MahgenTooltip from './MahgenTooltip'
+import MahjongInput from './MahjongInput'
+
+import { AgariType, RyuukyokuType, translateAgariType } from '../../types/agari'
+import { Wind, windsForMode } from '../../types/wind'
 
 interface AgariCardProps {
-  mode: Mode;
-  names: Names;
-  type: AgariType;
-  ryuukyokuType: RyuukyokuType | undefined;
-  agari: Wind[];
-  fu: number[];
-  setFu: Dispatch<SetStateAction<number[]>>;
-  han: number[];
-  setHan: Dispatch<SetStateAction<number[]>>;
-  kazoe: boolean[];
-  setKazoe: Dispatch<SetStateAction<boolean[]>>;
-  hai: string[];
-  setHai: Dispatch<SetStateAction<string[]>>;
+  type: AgariType
+  ryuukyokuType: RyuukyokuType | undefined
+  agari: Wind[]
+  fu: number[]
+  setFu: Dispatch<SetStateAction<number[]>>
+  han: number[]
+  setHan: Dispatch<SetStateAction<number[]>>
+  kazoe: boolean[]
+  setKazoe: Dispatch<SetStateAction<boolean[]>>
+  hai: string[]
+  setHai: Dispatch<SetStateAction<string[]>>
 }
 
 const AgariCard: FC<AgariCardProps> = ({
-  mode,
-  names,
   type,
   ryuukyokuType,
   agari,
@@ -43,9 +37,12 @@ const AgariCard: FC<AgariCardProps> = ({
   kazoe,
   setKazoe,
   hai,
-  setHai,
+  setHai
 }) => {
-  if (type === "ryuukyoku" && ryuukyokuType === "ryuukyoku") {
+  const mode = useAtomValue(modeAtom)
+  const names = useAtomValue(namesAtom)
+
+  if (type === 'ryuukyoku' && ryuukyokuType === 'ryuukyoku') {
     return (
       <Space direction="vertical">
         {agari.map((wind, index) => (
@@ -54,16 +51,16 @@ const AgariCard: FC<AgariCardProps> = ({
               <Checkbox
                 value={han[index] === -1}
                 onChange={(e) => {
-                  const newHan = [...han];
-                  newHan[index] = e.target.checked ? -1 : 0;
-                  setHan(newHan);
+                  const newHan = [...han]
+                  newHan[index] = e.target.checked ? -1 : 0
+                  setHan(newHan)
                 }}
               />
             </Form.Item>
           </Card>
         ))}
       </Space>
-    );
+    )
   }
 
   return (
@@ -75,7 +72,7 @@ const AgariCard: FC<AgariCardProps> = ({
             names[windsForMode[mode].indexOf(wind)]
           } ${translateAgariType(type)}`}
         >
-          {type !== "ryuukyoku" && (
+          {type !== 'ryuukyoku' && (
             <FuHanInput
               index={index}
               fu={fu}
@@ -89,23 +86,23 @@ const AgariCard: FC<AgariCardProps> = ({
           <Form.Item
             label={
               <MahgenTooltip>
-                {type === "ryuukyoku" ? "패" : "화료패"}
+                {type === 'ryuukyoku' ? '패' : '화료패'}
               </MahgenTooltip>
             }
           >
             <MahjongInput
               value={hai[index]}
               onChange={(h) => {
-                const newHai = [...hai];
-                newHai[index] = h;
-                setHai(newHai);
+                const newHai = [...hai]
+                newHai[index] = h
+                setHai(newHai)
               }}
             />
           </Form.Item>
         </Card>
       ))}
     </Space>
-  );
-};
+  )
+}
 
-export default AgariCard;
+export default AgariCard
