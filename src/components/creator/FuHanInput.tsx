@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Checkbox, Form, InputNumber, Space } from 'antd'
 
 import { useAtom } from 'jotai'
-import { fuAtom, hanAtom, kazoeAtom } from '../../store/atoms/creator'
+import { fuAtom, hanAtom, kazoeAtom } from '../../store/creator'
 
 interface FuHanInputProps {
   index: number

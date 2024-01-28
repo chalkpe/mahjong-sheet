@@ -2,9 +2,9 @@ import { FC } from 'react'
 import { Button, Table } from 'antd'
 
 import { useAtom, useAtomValue } from 'jotai'
-import modeAtom from '../../store/atoms/mode'
-import namesAtom from '../../store/atoms/names'
-import dataAtom from '../../store/atoms/data'
+import modeAtom from '../../store/mode'
+import namesAtom from '../../store/names'
+import dataAtom from '../../store/data'
 
 import Ba from './Ba'
 import FuHan from './FuHan'

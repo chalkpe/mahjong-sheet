@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Segmented } from 'antd'
 
 import { useAtom } from 'jotai'
-import modeAtom from '../../store/atoms/mode'
+import modeAtom from '../../store/mode'
 import { Mode } from '../../types/mode'
 
 const ModeEditor: FC = () => {

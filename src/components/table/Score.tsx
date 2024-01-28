@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Typography } from 'antd'
 
 import { useAtomCallback } from 'jotai/utils'
-import dataAtom from '../../store/atoms/data'
+import dataAtom from '../../store/data'
 
 import { Wind } from '../../types/wind'
 

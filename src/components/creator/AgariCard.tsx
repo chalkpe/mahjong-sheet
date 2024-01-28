@@ -2,15 +2,15 @@ import { FC } from 'react'
 import { Card, Checkbox, Form, Space } from 'antd'
 
 import { useAtom, useAtomValue } from 'jotai'
-import modeAtom from '../../store/atoms/mode'
-import namesAtom from '../../store/atoms/names'
+import modeAtom from '../../store/mode'
+import namesAtom from '../../store/names'
 import {
   agariAtom,
   haiAtom,
   hanAtom,
   ryuukyokuTypeAtom,
   typeAtom
-} from '../../store/atoms/creator'
+} from '../../store/creator'
 
 import FuHanInput from './FuHanInput'
 import MahgenTooltip from './MahgenTooltip'

@@ -1,8 +1,8 @@
 import { atom } from 'jotai'
 import dataAtom, { lastRoundAtom } from './data'
 
-import type { Wind } from '../../types/wind'
-import type { AgariType, RyuukyokuType } from '../../types/agari'
+import type { Wind } from '../types/wind'
+import type { AgariType, RyuukyokuType } from '../types/agari'
 
 export const baAtom = atom<Wind>('east')
 export const kyokuAtom = atom<number>(1)

@@ -3,8 +3,8 @@ import { Checkbox, Radio, Select, Space } from 'antd'
 
 import { useAtom, useAtomValue } from 'jotai'
 import { useAtomCallback } from 'jotai/utils'
-import modeAtom from '../../store/atoms/mode'
-import namesAtom from '../../store/atoms/names'
+import modeAtom from '../../store/mode'
+import namesAtom from '../../store/names'
 import {
   agariAtom,
   fuAtom,
@@ -14,7 +14,7 @@ import {
   kazoeAtom,
   ryuukyokuTypeAtom,
   typeAtom
-} from '../../store/atoms/creator'
+} from '../../store/creator'
 
 import { agariTypeOptions, ryuukyokuTypeOptions } from '../../types/agari'
 import { Wind, windsForMode } from '../../types/wind'

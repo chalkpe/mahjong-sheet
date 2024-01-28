@@ -2,10 +2,10 @@ import { FC } from 'react'
 import { InputNumber, Select, Space } from 'antd'
 
 import { useAtom, useAtomValue } from 'jotai'
-import modeAtom from '../../store/atoms/mode'
+import modeAtom from '../../store/mode'
 
 import { windOptions } from '../../types/wind'
-import { baAtom, honbaAtom, kyokuAtom } from '../../store/atoms/creator'
+import { baAtom, honbaAtom, kyokuAtom } from '../../store/creator'
 
 const BaSelect: FC = () => {
   const mode = useAtomValue(modeAtom)

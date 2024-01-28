@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react'
 import { Table, Typography } from 'antd'
 
 import { useAtomValue } from 'jotai'
-import namesAtom from '../../store/atoms/names'
+import namesAtom from '../../store/names'
 
 import { windsForMode } from '../../types/wind'
 import type { UmaMode } from '../../types/mode'

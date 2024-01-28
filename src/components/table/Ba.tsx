@@ -3,7 +3,7 @@ import { InputNumber, Select, Space, Typography } from 'antd'
 import { CheckOutlined } from '@ant-design/icons'
 
 import { useAtomValue } from 'jotai'
-import modeAtom from '../../store/atoms/mode'
+import modeAtom from '../../store/mode'
 
 import ScoreChecker from './ScoreChecker'
 

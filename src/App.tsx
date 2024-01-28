@@ -4,8 +4,8 @@ import { FC } from 'react'
 import { Card, Space } from 'antd'
 
 import { useAtomValue } from 'jotai'
-import modeAtom from './store/atoms/mode'
-import { lastRoundAtom } from './store/atoms/data'
+import modeAtom from './store/mode'
+import { lastRoundAtom } from './store/data'
 
 import GameEditor from './components/editor/GameEditor'
 import UmaTable from './components/table/UmaTable'

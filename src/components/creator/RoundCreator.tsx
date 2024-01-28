@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Button, Card, Form, Space } from 'antd'
 
 import { useAtomValue, useSetAtom } from 'jotai'
-import { createAtom, disabledAtom } from '../../store/atoms/creator'
+import { createAtom, disabledAtom } from '../../store/creator'
 
 import AgariCard from './AgariCard'
 import BaSelect from './BaSelect'

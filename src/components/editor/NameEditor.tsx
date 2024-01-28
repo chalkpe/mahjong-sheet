@@ -3,8 +3,8 @@ import { Descriptions, Typography } from "antd";
 
 import { useAtom, useAtomValue } from 'jotai'
 import { Names } from "../../types/names";
-import modeAtom from '../../store/atoms/mode'
-import namesAtom from '../../store/atoms/names'
+import modeAtom from '../../store/mode'
+import namesAtom from '../../store/names'
 
 const labels = {
   4: ["東", "南", "西", "北"],

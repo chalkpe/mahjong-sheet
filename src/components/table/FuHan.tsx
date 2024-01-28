@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 import { useAtomValue } from 'jotai'
-import modeAtom from '../../store/atoms/mode'
+import modeAtom from '../../store/mode'
 
 import { ryuukyokuTypeOptions } from '../../types/agari'
 import type { Round } from '../../types/round'

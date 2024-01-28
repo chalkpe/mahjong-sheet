@@ -7,9 +7,9 @@ import {
 } from '@ant-design/icons'
 
 import { useAtom } from 'jotai'
-import modeAtom from '../../store/atoms/mode'
-import namesAtom from '../../store/atoms/names'
-import dataAtom from '../../store/atoms/data'
+import modeAtom from '../../store/mode'
+import namesAtom from '../../store/names'
+import dataAtom from '../../store/data'
 
 const ExtraButtons: FC = () => {
   const [mode, setMode] = useAtom(modeAtom)
