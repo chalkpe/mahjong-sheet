@@ -1,25 +1,18 @@
-import { Dispatch, FC, SetStateAction } from 'react'
+import { FC } from 'react'
 import { Checkbox, Form, InputNumber, Space } from 'antd'
+
+import { useAtom } from 'jotai'
+import { fuAtom, hanAtom, kazoeAtom } from '../../store/atoms/creator'
 
 interface FuHanInputProps {
   index: number
-  fu: number[]
-  setFu: Dispatch<SetStateAction<number[]>>
-  han: number[]
-  setHan: Dispatch<SetStateAction<number[]>>
-  kazoe: boolean[]
-  setKazoe: Dispatch<SetStateAction<boolean[]>>
 }
 
-const FuHanInput: FC<FuHanInputProps> = ({
-  index,
-  fu,
-  setFu,
-  han,
-  setHan,
-  kazoe,
-  setKazoe
-}) => {
+const FuHanInput: FC<FuHanInputProps> = ({ index }) => {
+  const [fu, setFu] = useAtom(fuAtom)
+  const [han, setHan] = useAtom(hanAtom)
+  const [kazoe, setKazoe] = useAtom(kazoeAtom)
+
   return (
     <Form.Item label="부판">
       <Space>

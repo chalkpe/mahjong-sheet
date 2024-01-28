@@ -1,29 +1,18 @@
-import { Dispatch, FC, SetStateAction } from 'react'
+import { FC } from 'react'
 import { InputNumber, Select, Space } from 'antd'
 
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import modeAtom from '../../store/atoms/mode'
 
-import { Wind, windOptions } from '../../types/wind'
+import { windOptions } from '../../types/wind'
+import { baAtom, honbaAtom, kyokuAtom } from '../../store/atoms/creator'
 
-interface BaSelect {
-  ba: Wind
-  setBa: Dispatch<SetStateAction<Wind>>
-  kyoku: number
-  setKyoku: Dispatch<SetStateAction<number>>
-  honba: number
-  setHonba: Dispatch<SetStateAction<number>>
-}
-
-const BaSelect: FC<BaSelect> = ({
-  ba,
-  setBa,
-  kyoku,
-  setKyoku,
-  honba,
-  setHonba
-}) => {
+const BaSelect: FC = () => {
   const mode = useAtomValue(modeAtom)
+
+  const [ba, setBa] = useAtom(baAtom)
+  const [kyoku, setKyoku] = useAtom(kyokuAtom)
+  const [honba, setHonba] = useAtom(honbaAtom)
 
   return (
     <Space>

@@ -1,47 +1,40 @@
-import { Dispatch, FC, SetStateAction } from 'react'
+import { FC } from 'react'
 import { Checkbox, Radio, Select, Space } from 'antd'
 
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
+import { useAtomCallback } from 'jotai/utils'
 import modeAtom from '../../store/atoms/mode'
 import namesAtom from '../../store/atoms/names'
-
 import {
-  AgariType,
-  RyuukyokuType,
-  agariTypeOptions,
-  ryuukyokuTypeOptions
-} from '../../types/agari'
+  agariAtom,
+  fuAtom,
+  haiAtom,
+  hanAtom,
+  houjuuAtom,
+  kazoeAtom,
+  ryuukyokuTypeAtom,
+  typeAtom
+} from '../../store/atoms/creator'
+
+import { agariTypeOptions, ryuukyokuTypeOptions } from '../../types/agari'
 import { Wind, windsForMode } from '../../types/wind'
 
-interface TypeSelectProps {
-  type: AgariType
-  setType: Dispatch<SetStateAction<AgariType>>
-  ryuukyokuType: RyuukyokuType | undefined
-  setRyuukyokuType: Dispatch<SetStateAction<RyuukyokuType | undefined>>
-  agari: Wind[]
-  setAgari: Dispatch<SetStateAction<Wind[]>>
-  houjuu: Wind | undefined
-  setHoujuu: Dispatch<SetStateAction<Wind | undefined>>
-  setFu: Dispatch<SetStateAction<number[]>>
-  setHan: Dispatch<SetStateAction<number[]>>
-  setHai: Dispatch<SetStateAction<string[]>>
-}
-
-const TypeSelect: FC<TypeSelectProps> = ({
-  type,
-  setType,
-  ryuukyokuType,
-  setRyuukyokuType,
-  agari,
-  setAgari,
-  houjuu,
-  setHoujuu,
-  setFu,
-  setHan,
-  setHai
-}) => {
+const TypeSelect: FC = () => {
   const mode = useAtomValue(modeAtom)
   const names = useAtomValue(namesAtom)
+
+  const [type, setType] = useAtom(typeAtom)
+  const [ryuukyokuType, setRyuukyokuType] = useAtom(ryuukyokuTypeAtom)
+  const [agari, setAgari] = useAtom(agariAtom)
+  const [houjuu, setHoujuu] = useAtom(houjuuAtom)
+
+  const reset = useAtomCallback((get, set) => {
+    const agari = get(agariAtom)
+    set(fuAtom, [])
+    set(hanAtom, [])
+    set(kazoeAtom, [])
+    set(haiAtom, Array(agari.length).fill(''))
+  })
 
   return (
     <Space>
@@ -59,7 +52,10 @@ const TypeSelect: FC<TypeSelectProps> = ({
       {type === 'tsumo' ? (
         <Radio.Group
           value={agari[0]}
-          onChange={(e) => setAgari([e.target.value])}
+          onChange={(e) => {
+            setAgari([e.target.value])
+            reset()
+          }}
         >
           {names.slice(0, mode).map((name, index) => (
             <Radio
@@ -114,9 +110,7 @@ const TypeSelect: FC<TypeSelectProps> = ({
                     a.includes(wind as Wind)
                   ) as Wind[]
                 )
-                setFu([])
-                setHan([])
-                setHai(Array(a.length).fill(''))
+                reset()
               }}
             >
               {windsForMode[mode]

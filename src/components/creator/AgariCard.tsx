@@ -1,46 +1,34 @@
-import { Dispatch, FC, SetStateAction } from 'react'
+import { FC } from 'react'
 import { Card, Checkbox, Form, Space } from 'antd'
 
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import modeAtom from '../../store/atoms/mode'
 import namesAtom from '../../store/atoms/names'
+import {
+  agariAtom,
+  haiAtom,
+  hanAtom,
+  ryuukyokuTypeAtom,
+  typeAtom
+} from '../../store/atoms/creator'
 
 import FuHanInput from './FuHanInput'
 import MahgenTooltip from './MahgenTooltip'
 import MahjongInput from './MahjongInput'
 
-import { AgariType, RyuukyokuType, translateAgariType } from '../../types/agari'
-import { Wind, windsForMode } from '../../types/wind'
+import { translateAgariType } from '../../types/agari'
+import { windsForMode } from '../../types/wind'
 
-interface AgariCardProps {
-  type: AgariType
-  ryuukyokuType: RyuukyokuType | undefined
-  agari: Wind[]
-  fu: number[]
-  setFu: Dispatch<SetStateAction<number[]>>
-  han: number[]
-  setHan: Dispatch<SetStateAction<number[]>>
-  kazoe: boolean[]
-  setKazoe: Dispatch<SetStateAction<boolean[]>>
-  hai: string[]
-  setHai: Dispatch<SetStateAction<string[]>>
-}
-
-const AgariCard: FC<AgariCardProps> = ({
-  type,
-  ryuukyokuType,
-  agari,
-  fu,
-  setFu,
-  han,
-  setHan,
-  kazoe,
-  setKazoe,
-  hai,
-  setHai
-}) => {
+const AgariCard: FC = () => {
   const mode = useAtomValue(modeAtom)
   const names = useAtomValue(namesAtom)
+
+  const type = useAtomValue(typeAtom)
+  const ryuukyokuType = useAtomValue(ryuukyokuTypeAtom)
+  const agari = useAtomValue(agariAtom)
+
+  const [han, setHan] = useAtom(hanAtom)
+  const [hai, setHai] = useAtom(haiAtom)
 
   if (type === 'ryuukyoku' && ryuukyokuType === 'ryuukyoku') {
     return (
@@ -72,17 +60,7 @@ const AgariCard: FC<AgariCardProps> = ({
             names[windsForMode[mode].indexOf(wind)]
           } ${translateAgariType(type)}`}
         >
-          {type !== 'ryuukyoku' && (
-            <FuHanInput
-              index={index}
-              fu={fu}
-              setFu={setFu}
-              han={han}
-              setHan={setHan}
-              kazoe={kazoe}
-              setKazoe={setKazoe}
-            />
-          )}
+          {type !== 'ryuukyoku' && <FuHanInput index={index} />}
           <Form.Item
             label={
               <MahgenTooltip>
