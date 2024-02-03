@@ -46,8 +46,8 @@ const calculateUma = (score: Score, mode: UmaMode) => {
           )
           .map((s, i) => ({
             wind: s.wind,
-            score:
-              (s.score - (mode === 3 ? 35000 : 25000)) / 1000 + uma[mode][i],
+            score: s.score,
+            uma: (s.score - (mode === 3 ? 35000 : 25000)) / 1000 + uma[mode][i],
           }))
           .sort(
             (a, b) =>
@@ -59,7 +59,18 @@ const calculateUma = (score: Score, mode: UmaMode) => {
   return scores
 }
 
-const renderScore = (score: number) => (score > 0 ? '+' : '') + score.toFixed(1)
+const renderScore = (score: number | { score: number; uma: number }) => {
+  if (!score) return '-'
+  
+  return typeof score === 'number' ? (
+    (score > 0 ? '+' : '') + score.toFixed(1)
+  ) : (
+    <>
+      {score.score}
+      <br />({(score.uma > 0 ? '+' : '') + score.uma.toFixed(1)})
+    </>
+  )
+}
 
 const filterNull = <T,>(value: T | null): value is T => value !== null
 
@@ -86,10 +97,10 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
     () =>
       [...umas, lastUma].filter(filterNull).reduce(
         (sum, uma) => ({
-          east: sum.east + uma[0].score,
-          south: sum.south + uma[1].score,
-          west: sum.west + uma[2].score,
-          north: sum.north + (uma[3]?.score ?? 0),
+          east: sum.east + uma[0].uma,
+          south: sum.south + uma[1].uma,
+          west: sum.west + uma[2].uma,
+          north: sum.north + (uma[3]?.uma ?? 0),
         }),
         {
           east: 0,
@@ -192,17 +203,17 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
       dataSource={[
         ...umas.map((uma, index) => ({
           title: `#${index + 1}`,
-          east: uma ? renderScore(uma[0].score) : '-',
-          south: uma ? renderScore(uma[1].score) : '-',
-          west: uma ? renderScore(uma[2].score) : '-',
-          north: uma ? renderScore(uma[3]?.score ?? 0) : '-',
+          east: uma ? renderScore(uma[0]) : '-',
+          south: uma ? renderScore(uma[1]) : '-',
+          west: uma ? renderScore(uma[2]) : '-',
+          north: uma ? renderScore(uma[3]) : '-',
         })),
         {
           title: '현재',
-          east: lastUma ? renderScore(lastUma[0].score) : '-',
-          south: lastUma ? renderScore(lastUma[1].score) : '-',
-          west: lastUma ? renderScore(lastUma[2].score) : '-',
-          north: lastUma ? renderScore(lastUma[3]?.score ?? 0) : '-',
+          east: lastUma ? renderScore(lastUma[0]) : '-',
+          south: lastUma ? renderScore(lastUma[1]) : '-',
+          west: lastUma ? renderScore(lastUma[2]) : '-',
+          north: lastUma ? renderScore(lastUma[3]) : '-',
         },
         {
           title: '총합',
