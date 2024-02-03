@@ -18,7 +18,7 @@ const App: FC = () => {
   return (
     <Space direction="vertical">
       <GameEditor />
-      <Card extra={mode !== 2 && <UmaRecorder />}>
+      <Card title="점수 기록표" extra={mode !== 2 && <UmaRecorder />}>
         <Space direction="vertical" size="large">
           <RoundTable />
           {mode !== 2 && <UmaTable mode={mode} />}
