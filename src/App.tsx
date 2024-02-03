@@ -5,24 +5,23 @@ import { Card, Space } from 'antd'
 
 import { useAtomValue } from 'jotai'
 import modeAtom from './store/mode'
-import { lastRoundAtom } from './store/data'
 
 import GameEditor from './components/editor/GameEditor'
 import UmaTable from './components/table/UmaTable'
 import RoundTable from './components/table/RoundTable'
 import RoundCreator from './components/creator/RoundCreator'
+import UmaRecorder from './components/table/UmaRecorder'
 
 const App: FC = () => {
   const mode = useAtomValue(modeAtom)
-  const lastRound = useAtomValue(lastRoundAtom)
 
   return (
     <Space direction="vertical">
       <GameEditor />
-      <Card>
+      <Card extra={mode !== 2 && <UmaRecorder />}>
         <Space direction="vertical" size="large">
           <RoundTable />
-          {mode !== 2 && lastRound && <UmaTable mode={mode} round={lastRound} />}
+          {mode !== 2 && <UmaTable mode={mode} />}
         </Space>
       </Card>
       <RoundCreator />

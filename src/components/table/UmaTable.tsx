@@ -1,70 +1,132 @@
 import { FC, useMemo } from 'react'
-import { Table, Typography } from 'antd'
+import { Button, Table, Typography } from 'antd'
 
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import namesAtom from '../../store/names'
+import scoresAtom from '../../store/scores'
+import { lastScoreAtom } from '../../store/data'
 
 import { windsForMode } from '../../types/wind'
+import type { Score } from '../../types/scores'
 import type { UmaMode } from '../../types/mode'
-import type { Round } from '../../types/round'
 
 const uma = {
   3: [15, 0, -15],
-  4: [15, 5, -5, -15]
+  4: [15, 5, -5, -15],
+}
+
+const sum = {
+  3: 105000, // 35000 * 3
+  4: 100000, // 25000 * 4
+}
+
+const calculateUma = (score: Score, mode: UmaMode) => {
+  const base =
+    mode === 3
+      ? [
+          { wind: 'east', score: score.east },
+          { wind: 'south', score: score.south },
+          { wind: 'west', score: score.west },
+        ]
+      : [
+          { wind: 'east', score: score.east },
+          { wind: 'south', score: score.south },
+          { wind: 'west', score: score.west },
+          { wind: 'north', score: score.north },
+        ]
+
+  const scores =
+    base.reduce((sum, s) => sum + s.score, 0) === sum[mode]
+      ? base
+          .sort(
+            (a, b) =>
+              b.score - a.score ||
+              windsForMode[mode].indexOf(a.wind) -
+                windsForMode[mode].indexOf(b.wind)
+          )
+          .map((s, i) => ({
+            wind: s.wind,
+            score:
+              (s.score - (mode === 3 ? 35000 : 25000)) / 1000 + uma[mode][i],
+          }))
+          .sort(
+            (a, b) =>
+              windsForMode[mode].indexOf(a.wind) -
+              windsForMode[mode].indexOf(b.wind)
+          )
+      : null
+
+  return scores
 }
 
 const renderScore = (score: number) => (score > 0 ? '+' : '') + score.toFixed(1)
 
+const filterNull = <T,>(value: T | null): value is T => value !== null
+
 interface UmaTableProps {
   mode: UmaMode
-  round: Round
 }
 
-const UmaTable: FC<UmaTableProps> = ({ mode, round }) => {
+const UmaTable: FC<UmaTableProps> = ({ mode }) => {
   const names = useAtomValue(namesAtom)
 
-  const base = useMemo(
-    () =>
-      mode === 3
-        ? [
-            { wind: 'east', score: round.east },
-            { wind: 'south', score: round.south },
-            { wind: 'west', score: round.west }
-          ]
-        : [
-            { wind: 'east', score: round.east },
-            { wind: 'south', score: round.south },
-            { wind: 'west', score: round.west },
-            { wind: 'north', score: round.north }
-          ],
-    [mode, round.east, round.south, round.west, round.north]
+  const [scores, setScores] = useAtom(scoresAtom)
+  const umas = useMemo(
+    () => scores.map((score) => calculateUma(score, mode)),
+    [mode, scores]
   )
 
-  const scores = useMemo(
+  const lastScore = useAtomValue(lastScoreAtom)
+  const lastUma = useMemo(
+    () => calculateUma(lastScore, mode),
+    [lastScore, mode]
+  )
+
+  const sum = useMemo(
     () =>
-      base.reduce((sum, s) => sum + s.score, 0) ===
-        (mode === 3 ? 105000 : 100000) &&
-      base
-        .sort(
-          (a, b) =>
-            b.score - a.score ||
-            windsForMode[mode].indexOf(a.wind) -
-              windsForMode[mode].indexOf(b.wind)
-        )
-        .map((s, i) => ({
-          wind: s.wind,
-          rank: i + 1,
-          score: (s.score - (mode === 3 ? 35000 : 25000)) / 1000 + uma[mode][i]
-        }))
+      [...umas, lastUma].filter(filterNull).reduce(
+        (sum, uma) => ({
+          east: sum.east + uma[0].score,
+          south: sum.south + uma[1].score,
+          west: sum.west + uma[2].score,
+          north: sum.north + (uma[3]?.score ?? 0),
+        }),
+        {
+          east: 0,
+          south: 0,
+          west: 0,
+          north: 0,
+        }
+      ),
+    [lastUma, umas]
+  )
+
+  const ranks = useMemo(
+    () =>
+      (mode === 3
+        ? [
+            { wind: 'east', sum: sum.east },
+            { wind: 'south', sum: sum.south },
+            { wind: 'west', sum: sum.west },
+          ]
+        : [
+            { wind: 'east', sum: sum.east },
+            { wind: 'south', sum: sum.south },
+            { wind: 'west', sum: sum.west },
+            { wind: 'north', sum: sum.north },
+          ]
+      )
+        .sort((a, b) => b.sum - a.sum)
+        .map((s, i) => ({ ...s, rank: i + 1 }))
         .sort(
           (a, b) =>
             windsForMode[mode].indexOf(a.wind) -
             windsForMode[mode].indexOf(b.wind)
         ),
-    [base, mode]
+    [sum, mode]
   )
 
-  return scores ? (
+  return (
     <Table
       style={{ width: 'fit-content' }}
       bordered
@@ -76,53 +138,89 @@ const UmaTable: FC<UmaTableProps> = ({ mode, round }) => {
           width: 130,
           render: (title: string) => (
             <Typography.Text strong>{title}</Typography.Text>
-          )
+          ),
         },
         {
           title: names[0],
           dataIndex: 'east',
-          width: 100
+          width: 100,
+          align: 'center',
         },
         {
           title: names[1],
           dataIndex: 'south',
-          width: 100
+          width: 100,
+          align: 'center',
         },
 
         {
           title: names[2],
           dataIndex: 'west',
-          width: 100
+          width: 100,
+          align: 'center',
         },
         ...(mode === 4
           ? [
               {
                 title: names[3],
                 dataIndex: 'north',
-                width: 100
-              }
+                width: 100,
+                align: 'center' as const,
+              },
             ]
-          : [])
+          : []),
+        {
+          title: '삭제',
+          align: 'center',
+          render: (_, __, index) => {
+            if (index >= umas.length) return null
+            return (
+              <Button
+                type="link"
+                onClick={() => {
+                  const newScores = [...scores]
+                  newScores.splice(index, 1)
+                  setScores(newScores)
+                }}
+              >
+                삭제
+              </Button>
+            )
+          },
+        },
       ]}
       dataSource={[
+        ...umas.map((uma, index) => ({
+          title: `#${index + 1}`,
+          east: uma ? renderScore(uma[0].score) : '-',
+          south: uma ? renderScore(uma[1].score) : '-',
+          west: uma ? renderScore(uma[2].score) : '-',
+          north: uma ? renderScore(uma[3]?.score ?? 0) : '-',
+        })),
         {
-          title: '총점',
-          east: renderScore(scores[0].score),
-          south: renderScore(scores[1].score),
-          west: renderScore(scores[2].score),
-          north: renderScore(scores[3]?.score ?? 0)
+          title: '현재',
+          east: lastUma ? renderScore(lastUma[0].score) : '-',
+          south: lastUma ? renderScore(lastUma[1].score) : '-',
+          west: lastUma ? renderScore(lastUma[2].score) : '-',
+          north: lastUma ? renderScore(lastUma[3]?.score ?? 0) : '-',
         },
-
+        {
+          title: '총합',
+          east: sum.east === 0 ? '-' : renderScore(sum.east),
+          south: sum.south === 0 ? '-' : renderScore(sum.south),
+          west: sum.west === 0 ? '-' : renderScore(sum.west),
+          north: sum.north === 0 ? '-' : renderScore(sum.north),
+        },
         {
           title: '순위',
-          east: scores[0].rank,
-          south: scores[1].rank,
-          west: scores[2].rank,
-          north: scores[3]?.rank
-        }
+          east: ranks[0].rank,
+          south: ranks[1].rank,
+          west: ranks[2].rank,
+          north: ranks[3]?.rank,
+        },
       ]}
     />
-  ) : null
+  )
 }
 
 export default UmaTable
