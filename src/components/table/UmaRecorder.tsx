@@ -3,10 +3,11 @@ import { Button } from 'antd'
 
 import { useAtomValue, useSetAtom } from 'jotai'
 import scoresAtom from '../../store/scores'
-import { lastRoundAtom } from '../../store/data'
+import dataAtom, { lastRoundAtom } from '../../store/data'
 
 const UmaRecorder: FC = () => {
   const lastRound = useAtomValue(lastRoundAtom)
+  const setData = useSetAtom(dataAtom)
   const setScores = useSetAtom(scoresAtom)
 
   const onRecord = useCallback(() => {
@@ -21,7 +22,9 @@ const UmaRecorder: FC = () => {
         north: lastRound.north,
       },
     ])
-  }, [lastRound, setScores])
+
+    setData([])
+  }, [lastRound, setData, setScores])
 
   return (
     <>
