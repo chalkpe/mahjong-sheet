@@ -1,6 +1,8 @@
 import { atom } from 'jotai'
+import modeAtom from './mode'
 import dataAtom, { lastRoundAtom } from './data'
 
+import { defaultScore } from '../types/scores'
 import type { Wind } from '../types/wind'
 import type { AgariType, RyuukyokuType } from '../types/agari'
 
@@ -49,6 +51,8 @@ export const createAtom = atom(null, (get, set) => {
   const han = get(hanAtom)
   const kazoe = get(kazoeAtom)
   const hai = get(haiAtom)
+
+  const mode = get(modeAtom)
   const lastRound = get(lastRoundAtom)
 
   set(dataAtom, [
@@ -65,11 +69,11 @@ export const createAtom = atom(null, (get, set) => {
       han,
       kazoe,
       hai,
-      east: lastRound?.east ?? 0,
-      south: lastRound?.south ?? 0,
-      west: lastRound?.west ?? 0,
-      north: lastRound?.north ?? 0
-    }
+      east: lastRound?.east ?? defaultScore[mode],
+      south: lastRound?.south ?? defaultScore[mode],
+      west: lastRound?.west ?? defaultScore[mode],
+      north: lastRound?.north ?? defaultScore[mode],
+    },
   ])
 
   set(typeAtom, 'tsumo')
