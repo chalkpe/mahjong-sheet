@@ -10,11 +10,13 @@ import { useAtom } from 'jotai'
 import modeAtom from '../../store/mode'
 import namesAtom from '../../store/names'
 import dataAtom from '../../store/data'
+import scoresAtom from '../../store/scores'
 
 const ExtraButtons: FC = () => {
   const [mode, setMode] = useAtom(modeAtom)
   const [names, setNames] = useAtom(namesAtom)
   const [data, setData] = useAtom(dataAtom)
+  const [scores, setScores] = useAtom(scoresAtom)
 
   return (
     <Space>
@@ -23,10 +25,11 @@ const ExtraButtons: FC = () => {
         onClick={() => {
           navigator.clipboard.readText().then((text) => {
             try {
-              const { mode, names, data } = JSON.parse(text)
+              const { mode, names, data, scores } = JSON.parse(text)
               setMode(mode)
               setNames(names)
               setData(data)
+              setScores(scores)
               message.success('클립보드에서 데이터를 가져왔습니다.')
             } catch {
               message.error('클립보드에 올바른 데이터가 없습니다.')
@@ -40,7 +43,7 @@ const ExtraButtons: FC = () => {
       <Button
         icon={<ExportOutlined />}
         onClick={() => {
-          navigator.clipboard.writeText(JSON.stringify({ mode, names, data }))
+          navigator.clipboard.writeText(JSON.stringify({ mode, names, data, scores }))
           message.success('클립보드에 데이터를 복사했습니다.')
         }}
       >
