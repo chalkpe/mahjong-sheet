@@ -18,6 +18,7 @@ const FuHanInput: FC<FuHanInputProps> = ({ index }) => {
       <Space>
         {(!han[index] || han[index] <= 4) && (
           <InputNumber
+            type="number"
             value={fu[index]}
             onChange={(v) => {
               if (v === null) return
@@ -31,6 +32,7 @@ const FuHanInput: FC<FuHanInputProps> = ({ index }) => {
           />
         )}
         <InputNumber
+          type="number"
           value={han[index]}
           onChange={(v) => {
             if (v === null) return

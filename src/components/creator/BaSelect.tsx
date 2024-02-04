@@ -39,6 +39,7 @@ const BaSelect: FC = () => {
       />
 
       <InputNumber
+        type="number"
         value={honba}
         onChange={(v) => v !== null && setHonba(v)}
         min={0}
