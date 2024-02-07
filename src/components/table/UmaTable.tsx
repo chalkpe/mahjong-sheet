@@ -38,36 +38,52 @@ const calculateUma = (score: Score, mode: UmaMode) => {
   const scores =
     base.reduce((sum, s) => sum + s.score, 0) === sum[mode]
       ? base
-          .sort(
-            (a, b) =>
-              b.score - a.score ||
-              windsForMode[mode].indexOf(a.wind) -
-                windsForMode[mode].indexOf(b.wind)
-          )
+          .sort((a, b) => b.score - a.score || windsForMode[mode].indexOf(a.wind) - windsForMode[mode].indexOf(b.wind))
           .map((s, i) => ({
             wind: s.wind,
             score: s.score,
             uma: (s.score - (mode === 3 ? 35000 : 25000)) / 1000 + uma[mode][i],
           }))
-          .sort(
-            (a, b) =>
-              windsForMode[mode].indexOf(a.wind) -
-              windsForMode[mode].indexOf(b.wind)
-          )
+          .sort((a, b) => windsForMode[mode].indexOf(a.wind) - windsForMode[mode].indexOf(b.wind))
       : null
 
   return scores
 }
 
-const renderScore = (score: number | { score: number; uma: number }) => {
-  if (!score) return '-'
+const calculateRanks = (sum: Score, mode: UmaMode) =>
+  (mode === 3
+    ? [
+        { wind: 'east', sum: sum.east },
+        { wind: 'south', sum: sum.south },
+        { wind: 'west', sum: sum.west },
+      ]
+    : [
+        { wind: 'east', sum: sum.east },
+        { wind: 'south', sum: sum.south },
+        { wind: 'west', sum: sum.west },
+        { wind: 'north', sum: sum.north },
+      ]
+  )
+    .sort((a, b) => b.sum - a.sum)
+    .map((s, i) => ({ ...s, rank: i + 1 }))
+    .sort((a, b) => windsForMode[mode].indexOf(a.wind) - windsForMode[mode].indexOf(b.wind))
+
+const render = (score: number | { score: number; uma: number }, ranks: { rank: number }[], index: number) => {
+  if (!score) score = 0
 
   return typeof score === 'number' ? (
-    (score > 0 ? '+' : '') + score.toFixed(1)
+    <>
+      {(score > 0 ? '+' : '') + score.toFixed(1)}
+      <br />
+      <Typography.Text strong>{ranks[index]?.rank ?? '-'}등</Typography.Text>
+    </>
   ) : (
     <>
       {score.score}
-      <br />({(score.uma > 0 ? '+' : '') + score.uma.toFixed(1)})
+      <br />
+      {(score.uma > 0 ? '+' : '') + score.uma.toFixed(1)}
+      <br />
+      <Typography.Text strong>{ranks[index]?.rank ?? '-'}등</Typography.Text>
     </>
   )
 }
@@ -82,18 +98,14 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
   const names = useAtomValue(namesAtom)
 
   const [scores, setScores] = useAtom(scoresAtom)
-  const umas = useMemo(
-    () => scores.map((score) => calculateUma(score, mode)),
-    [mode, scores]
-  )
+  const umas = useMemo(() => scores.map((score) => calculateUma(score, mode)), [mode, scores])
+  const ranks = useMemo(() => scores.map((score) => calculateRanks(score, mode)), [mode, scores])
 
   const lastScore = useAtomValue(lastScoreAtom)
-  const lastUma = useMemo(
-    () => calculateUma(lastScore, mode),
-    [lastScore, mode]
-  )
+  const lastUma = useMemo(() => calculateUma(lastScore, mode), [lastScore, mode])
+  const lastRanks = useMemo(() => calculateRanks(lastScore, mode), [lastScore, mode])
 
-  const sum = useMemo(
+  const sum: Score = useMemo(
     () =>
       [...umas, lastUma].filter(filterNull).reduce(
         (sum, uma) => ({
@@ -102,40 +114,11 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
           west: sum.west + uma[2].uma,
           north: sum.north + (uma[3]?.uma ?? 0),
         }),
-        {
-          east: 0,
-          south: 0,
-          west: 0,
-          north: 0,
-        }
+        { east: 0, south: 0, west: 0, north: 0 }
       ),
     [lastUma, umas]
   )
-
-  const ranks = useMemo(
-    () =>
-      (mode === 3
-        ? [
-            { wind: 'east', sum: sum.east },
-            { wind: 'south', sum: sum.south },
-            { wind: 'west', sum: sum.west },
-          ]
-        : [
-            { wind: 'east', sum: sum.east },
-            { wind: 'south', sum: sum.south },
-            { wind: 'west', sum: sum.west },
-            { wind: 'north', sum: sum.north },
-          ]
-      )
-        .sort((a, b) => b.sum - a.sum)
-        .map((s, i) => ({ ...s, rank: i + 1 }))
-        .sort(
-          (a, b) =>
-            windsForMode[mode].indexOf(a.wind) -
-            windsForMode[mode].indexOf(b.wind)
-        ),
-    [sum, mode]
-  )
+  const sumRanks = useMemo(() => calculateRanks(sum, mode), [sum, mode])
 
   return (
     <Table
@@ -147,9 +130,7 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
           title: '',
           dataIndex: 'title',
           width: 130,
-          render: (title: string) => (
-            <Typography.Text strong>{title}</Typography.Text>
-          ),
+          render: (title: string) => <Typography.Text strong>{title}</Typography.Text>,
         },
         {
           title: names[0],
@@ -203,31 +184,24 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
       dataSource={[
         ...umas.map((uma, index) => ({
           title: `#${index + 1}`,
-          east: uma ? renderScore(uma[0]) : '-',
-          south: uma ? renderScore(uma[1]) : '-',
-          west: uma ? renderScore(uma[2]) : '-',
-          north: uma ? renderScore(uma[3]) : '-',
+          east: uma ? render(uma[0], ranks[index], 0) : '-',
+          south: uma ? render(uma[1], ranks[index], 1) : '-',
+          west: uma ? render(uma[2], ranks[index], 2) : '-',
+          north: uma ? render(uma[3], ranks[index], 3) : '-',
         })),
         {
           title: '현재',
-          east: lastUma ? renderScore(lastUma[0]) : '-',
-          south: lastUma ? renderScore(lastUma[1]) : '-',
-          west: lastUma ? renderScore(lastUma[2]) : '-',
-          north: lastUma ? renderScore(lastUma[3]) : '-',
+          east: lastUma ? render(lastUma[0], lastRanks, 0) : '-',
+          south: lastUma ? render(lastUma[1], lastRanks, 1) : '-',
+          west: lastUma ? render(lastUma[2], lastRanks, 2) : '-',
+          north: lastUma ? render(lastUma[3], lastRanks, 3) : '-',
         },
         {
           title: '총합',
-          east: sum.east === 0 ? '-' : renderScore(sum.east),
-          south: sum.south === 0 ? '-' : renderScore(sum.south),
-          west: sum.west === 0 ? '-' : renderScore(sum.west),
-          north: sum.north === 0 ? '-' : renderScore(sum.north),
-        },
-        {
-          title: '순위',
-          east: ranks[0].rank,
-          south: ranks[1].rank,
-          west: ranks[2].rank,
-          north: ranks[3]?.rank,
+          east: render(sum.east, sumRanks, 0),
+          south: render(sum.south, sumRanks, 1),
+          west: render(sum.west, sumRanks, 2),
+          north: render(sum.north, sumRanks, 3),
         },
       ]}
     />
