@@ -27,13 +27,9 @@ const FuHan: FC<FuHanProps> = ({ round }) => {
   if (round.type === 'ryuukyoku') {
     return !round.ryuukyokuType || round.ryuukyokuType === 'ryuukyoku'
       ? round.agari.length !== mode && round.agari.length > 0
-        ? round.agari.flatMap((_, index) => [
-            index > 0 ? <br /> : '',
-            round.han[index] === -1 ? '만관' : '-'
-          ])
+        ? round.agari.flatMap((_, index) => [index > 0 ? <br /> : '', round.han[index] === -1 ? '만관' : '-'])
         : '-'
-      : ryuukyokuTypeOptions.find((r) => r.value === round.ryuukyokuType)
-          ?.label ?? '-'
+      : ryuukyokuTypeOptions.find((r) => r.value === round.ryuukyokuType)?.label ?? '-'
   }
 
   return round.agari.flatMap((_, index) =>
@@ -46,18 +42,14 @@ const FuHan: FC<FuHanProps> = ({ round }) => {
             <strong> 역만</strong>
           ) : (
             <strong> {Math.floor(round.han[index] / 13)}배 역만</strong>
-          )
+          ),
         ]
       : round.han[index] > 4
-      ? [
-          index > 0 ? <br /> : '',
-          round.han[index] + '판',
-          <strong>{getName(round.fu[index], round.han[index])}</strong>
-        ]
+      ? [index > 0 ? <br /> : '', round.han[index] + '판', <strong>{getName(round.fu[index], round.han[index])}</strong>]
       : [
           index > 0 ? <br /> : '',
           round.fu[index] + '부 ' + round.han[index] + '판',
-          <strong>{getName(round.fu[index], round.han[index])}</strong>
+          <strong>{getName(round.fu[index], round.han[index])}</strong>,
         ]
   )
 }

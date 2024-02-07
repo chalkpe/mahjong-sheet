@@ -4,13 +4,7 @@ import { Card, Checkbox, Form, Space } from 'antd'
 import { useAtom, useAtomValue } from 'jotai'
 import modeAtom from '../../store/mode'
 import namesAtom from '../../store/names'
-import {
-  agariAtom,
-  haiAtom,
-  hanAtom,
-  ryuukyokuTypeAtom,
-  typeAtom
-} from '../../store/creator'
+import { agariAtom, haiAtom, hanAtom, ryuukyokuTypeAtom, typeAtom } from '../../store/creator'
 
 import FuHanInput from './FuHanInput'
 import MahgenTooltip from './MahgenTooltip'
@@ -54,20 +48,9 @@ const AgariCard: FC = () => {
   return (
     <Space direction="vertical">
       {agari.map((wind, index) => (
-        <Card
-          key={wind}
-          title={`${
-            names[windsForMode[mode].indexOf(wind)]
-          } ${translateAgariType(type)}`}
-        >
+        <Card key={wind} title={`${names[windsForMode[mode].indexOf(wind)]} ${translateAgariType(type)}`}>
           {type !== 'ryuukyoku' && <FuHanInput index={index} />}
-          <Form.Item
-            label={
-              <MahgenTooltip>
-                {type === 'ryuukyoku' ? '패' : '화료패'}
-              </MahgenTooltip>
-            }
-          >
+          <Form.Item label={<MahgenTooltip>{type === 'ryuukyoku' ? '패' : '화료패'}</MahgenTooltip>}>
             <MahjongInput
               value={hai[index]}
               onChange={(h) => {

@@ -13,16 +13,7 @@ const UmaRecorder: FC = () => {
   const onRecord = useCallback(() => {
     if (!lastRound) return
 
-    setScores((scores) => [
-      ...scores,
-      {
-        east: lastRound.east,
-        south: lastRound.south,
-        west: lastRound.west,
-        north: lastRound.north,
-      },
-    ])
-
+    setScores((scores) => [...scores, { east: lastRound.east, south: lastRound.south, west: lastRound.west, north: lastRound.north }])
     setData([])
   }, [lastRound, setData, setScores])
 

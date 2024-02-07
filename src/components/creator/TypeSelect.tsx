@@ -5,16 +5,7 @@ import { useAtom, useAtomValue } from 'jotai'
 import { useAtomCallback } from 'jotai/utils'
 import modeAtom from '../../store/mode'
 import namesAtom from '../../store/names'
-import {
-  agariAtom,
-  fuAtom,
-  haiAtom,
-  hanAtom,
-  houjuuAtom,
-  kazoeAtom,
-  ryuukyokuTypeAtom,
-  typeAtom
-} from '../../store/creator'
+import { agariAtom, fuAtom, haiAtom, hanAtom, houjuuAtom, kazoeAtom, ryuukyokuTypeAtom, typeAtom } from '../../store/creator'
 
 import { agariTypeOptions, ryuukyokuTypeOptions } from '../../types/agari'
 import { Wind, windsForMode } from '../../types/wind'
@@ -58,10 +49,7 @@ const TypeSelect: FC = () => {
           }}
         >
           {names.slice(0, mode).map((name, index) => (
-            <Radio
-              key={windsForMode[mode][index]}
-              value={windsForMode[mode][index]}
-            >
+            <Radio key={windsForMode[mode][index]} value={windsForMode[mode][index]}>
               {name}
             </Radio>
           ))}
@@ -77,10 +65,7 @@ const TypeSelect: FC = () => {
               }}
               placeholder="방총"
               style={{ width: 120 }}
-              options={names.slice(0, mode).map((name, index) => ({
-                label: name + ' 방총',
-                value: windsForMode[mode][index]
-              }))}
+              options={names.slice(0, mode).map((name, index) => ({ label: name + ' 방총', value: windsForMode[mode][index] }))}
             />
           )}
           {type === 'ryuukyoku' && (
@@ -96,20 +81,13 @@ const TypeSelect: FC = () => {
             />
           )}
 
-          {(type === 'ron' ||
-            (type === 'ryuukyoku' &&
-              (ryuukyokuType === 'ryuukyoku' ||
-                ryuukyokuType === 'kyuushuukyuuhai'))) && (
+          {(type === 'ron' || (type === 'ryuukyoku' && (ryuukyokuType === 'ryuukyoku' || ryuukyokuType === 'kyuushuukyuuhai'))) && (
             <Checkbox.Group
               value={agari}
               disabled={type === 'ron' && houjuu === undefined}
               onChange={(v) => {
                 const a = v as Wind[]
-                setAgari(
-                  windsForMode[mode].filter((wind) =>
-                    a.includes(wind as Wind)
-                  ) as Wind[]
-                )
+                setAgari(windsForMode[mode].filter((wind) => a.includes(wind as Wind)) as Wind[])
                 reset()
               }}
             >

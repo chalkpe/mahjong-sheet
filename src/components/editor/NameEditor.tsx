@@ -1,16 +1,16 @@
-import { FC } from "react";
-import { Descriptions, Typography } from "antd";
+import { FC } from 'react'
+import { Descriptions, Typography } from 'antd'
 
 import { useAtom, useAtomValue } from 'jotai'
-import { Names } from "../../types/names";
+import { Names } from '../../types/names'
 import modeAtom from '../../store/mode'
 import namesAtom from '../../store/names'
 
 const labels = {
-  4: ["東", "南", "西", "北"],
-  3: ["東", "南", "西"],
-  2: ["東", "西"],
-};
+  4: ['東', '南', '西', '北'],
+  3: ['東', '南', '西'],
+  2: ['東', '西'],
+}
 
 const NameEditor: FC = () => {
   const mode = useAtomValue(modeAtom)
@@ -27,16 +27,15 @@ const NameEditor: FC = () => {
             editable={{
               maxLength: 6,
               text: names[index],
-              onChange: (text) =>
-                setNames(names.map((v, i) => (i === index ? text : v)) as Names)
+              onChange: (text) => setNames(names.map((v, i) => (i === index ? text : v)) as Names),
             }}
           >
             {names[index]}
           </Typography.Text>
-        )
+        ),
       }))}
     />
   )
-};
+}
 
 export default NameEditor

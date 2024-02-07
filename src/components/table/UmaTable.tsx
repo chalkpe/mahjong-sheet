@@ -61,7 +61,7 @@ const calculateUma = (score: Score, mode: UmaMode) => {
 
 const renderScore = (score: number | { score: number; uma: number }) => {
   if (!score) return '-'
-  
+
   return typeof score === 'number' ? (
     (score > 0 ? '+' : '') + score.toFixed(1)
   ) : (

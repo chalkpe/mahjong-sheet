@@ -33,9 +33,7 @@ const BaSelect: FC = () => {
           setHonba(0)
         }}
         style={{ width: 70 }}
-        options={[1, 2, 3, 4]
-          .slice(0, mode)
-          .map((i) => ({ label: `${i}국`, value: i }))}
+        options={[1, 2, 3, 4].slice(0, mode).map((i) => ({ label: `${i}국`, value: i }))}
       />
 
       <InputNumber

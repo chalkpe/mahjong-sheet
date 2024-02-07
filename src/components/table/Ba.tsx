@@ -43,9 +43,7 @@ const Ba: FC<BaProps> = ({ round, setRound }) => {
             setHonba(0)
           }}
           style={{ width: 70 }}
-          options={[1, 2, 3, 4]
-            .slice(0, mode)
-            .map((i) => ({ label: `${i}국`, value: i }))}
+          options={[1, 2, 3, 4].slice(0, mode).map((i) => ({ label: `${i}국`, value: i }))}
         />
 
         <InputNumber
@@ -78,19 +76,9 @@ const Ba: FC<BaProps> = ({ round, setRound }) => {
           ●
         </Typography.Text>
       )}
-      {mode === 3 && (
-        <ScoreChecker
-          sum={round.east + round.south + round.west}
-          expected={105000}
-          onClick={() => setIsEditing(true)}
-        />
-      )}
+      {mode === 3 && <ScoreChecker sum={round.east + round.south + round.west} expected={105000} onClick={() => setIsEditing(true)} />}
       {mode === 4 && (
-        <ScoreChecker
-          sum={round.east + round.south + round.west + round.north}
-          expected={100000}
-          onClick={() => setIsEditing(true)}
-        />
+        <ScoreChecker sum={round.east + round.south + round.west + round.north} expected={100000} onClick={() => setIsEditing(true)} />
       )}
     </>
   )

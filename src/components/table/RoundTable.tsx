@@ -35,25 +35,18 @@ const RoundTable: FC = () => {
               round={round}
               setRound={(round) => {
                 const newData = [...data]
-                newData[index] =
-                  typeof round === 'function' ? round(newData[index]) : round
+                newData[index] = typeof round === 'function' ? round(newData[index]) : round
                 setData(newData)
               }}
             />
-          )
+          ),
         },
         {
           title: names[0],
           dataIndex: 'east',
           width: 100,
           align: 'center',
-          render: (value: number, _: Round, index: number) => (
-            <Score
-              wind="east"
-              value={value}
-              index={index}
-            />
-          )
+          render: (value: number, _: Round, index: number) => <Score wind="east" value={value} index={index} />,
         },
         ...(mode === 3 || mode === 4
           ? [
@@ -62,14 +55,8 @@ const RoundTable: FC = () => {
                 dataIndex: 'south',
                 width: 100,
                 align: 'center' as const,
-                render: (value: number, _: Round, index: number) => (
-                  <Score
-                    wind="south"
-                    value={value}
-                    index={index}
-                  />
-                )
-              }
+                render: (value: number, _: Round, index: number) => <Score wind="south" value={value} index={index} />,
+              },
             ]
           : []),
         {
@@ -77,13 +64,7 @@ const RoundTable: FC = () => {
           dataIndex: 'west',
           width: 100,
           align: 'center',
-          render: (value: number, _: Round, index: number) => (
-            <Score
-              wind="west"
-              value={value}
-              index={index}
-            />
-          )
+          render: (value: number, _: Round, index: number) => <Score wind="west" value={value} index={index} />,
         },
         ...(mode === 4
           ? [
@@ -92,14 +73,8 @@ const RoundTable: FC = () => {
                 dataIndex: 'north',
                 width: 100,
                 align: 'center' as const,
-                render: (value: number, _: Round, index: number) => (
-                  <Score
-                    wind="north"
-                    value={value}
-                    index={index}
-                  />
-                )
-              }
+                render: (value: number, _: Round, index: number) => <Score wind="north" value={value} index={index} />,
+              },
             ]
           : []),
         {
@@ -109,11 +84,8 @@ const RoundTable: FC = () => {
           dataIndex: 'agari',
           render: (agari: Round['agari']) =>
             agari.length !== mode && agari.length > 0
-              ? agari.flatMap((a, index) => [
-                  index > 0 ? <br /> : '',
-                  translateWind(a, mode, names)
-                ])
-              : '-'
+              ? agari.flatMap((a, index) => [index > 0 ? <br /> : '', translateWind(a, mode, names)])
+              : '-',
         },
         {
           title: '형태',
@@ -121,27 +93,24 @@ const RoundTable: FC = () => {
           align: 'center',
           dataIndex: 'type',
           render: (type: Round['type'], round: Round) =>
-            (type === 'ron'
-              ? ['', '', '더블 ', '트리플 '][round.agari.length]
-              : '') + translateAgariType(type)
+            (type === 'ron' ? ['', '', '더블 ', '트리플 '][round.agari.length] : '') + translateAgariType(type),
         },
         {
           title: '방총',
           width: 100,
           align: 'center',
-          render: (round: Round) =>
-            round.houjuu ? translateWind(round.houjuu, mode, names) : '-'
+          render: (round: Round) => (round.houjuu ? translateWind(round.houjuu, mode, names) : '-'),
         },
         {
           title: '부판',
           width: 140,
           align: 'center',
-          render: (round: Round) => <FuHan round={round} />
+          render: (round: Round) => <FuHan round={round} />,
         },
         {
           title: '패',
           dataIndex: 'hai',
-          render: (hai: string[]) => <Hai hai={hai} />
+          render: (hai: string[]) => <Hai hai={hai} />,
         },
         {
           title: '삭제',
@@ -157,12 +126,10 @@ const RoundTable: FC = () => {
             >
               삭제
             </Button>
-          )
-        }
+          ),
+        },
       ]}
-      rowKey={(round) =>
-        [round.ba, round.kyoku, round.honba, ...round.hai].join()
-      }
+      rowKey={(round) => [round.ba, round.kyoku, round.honba, ...round.hai].join()}
     />
   )
 }

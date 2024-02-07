@@ -27,15 +27,8 @@ export const disabledAtom = atom((get) => {
   const hai = get(haiAtom)
 
   return (
-    (type === 'ryuukyoku'
-      ? false
-      : type === 'tsumo'
-      ? agari.length === 0
-      : houjuu === undefined || agari.length === 0) ||
-    (type !== 'ryuukyoku' &&
-      [...Array(agari.length).keys()].some(
-        (i) => !han[i] || (han[i] <= 4 && !fu[i]) || !hai[i] || hai[i] === '||'
-      ))
+    (type === 'ryuukyoku' ? false : type === 'tsumo' ? agari.length === 0 : houjuu === undefined || agari.length === 0) ||
+    (type !== 'ryuukyoku' && [...Array(agari.length).keys()].some((i) => !han[i] || (han[i] <= 4 && !fu[i]) || !hai[i] || hai[i] === '||'))
   )
 })
 

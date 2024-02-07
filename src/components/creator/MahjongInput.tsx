@@ -17,10 +17,10 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
 
   const [focus, setFocus] = useState<'menzen' | 'furo' | 'agari'>()
 
-  useEffect(() => {
-    `${menzenStr}|${furoStr}|${agariStr}` !== `${menzen}|${furo}|${agari}` &&
-      onChange(`${menzen}|${furo}|${agari}`)
-  }, [menzen, furo, agari, onChange, menzenStr, furoStr, agariStr])
+  useEffect(
+    () => void (`${menzenStr}|${furoStr}|${agariStr}` !== `${menzen}|${furo}|${agari}` && onChange(`${menzen}|${furo}|${agari}`)),
+    [menzen, furo, agari, onChange, menzenStr, furoStr, agariStr]
+  )
 
   const onInput = useCallback(
     (tile: string) => {
@@ -81,11 +81,7 @@ const MahjongInput: FC<MahjongInputProps> = ({ value, onChange }) => {
         <Space direction="horizontal">
           {value
             .split('|')
-            .map((hh, i) =>
-              hh || i === 2 ? (
-                <Mahgen key={hh + i} sequence={hh || '0z'} />
-              ) : undefined
-            )
+            .map((hh, i) => (hh || i === 2 ? <Mahgen key={hh + i} sequence={hh || '0z'} /> : undefined))
             .filter(Boolean)}
         </Space>
       )}

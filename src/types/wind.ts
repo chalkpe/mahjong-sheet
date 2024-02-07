@@ -15,9 +15,4 @@ export const windOptions: { label: string; value: Wind }[] = [
   { label: '북', value: 'north' },
 ]
 
-export const translateWind = (
-  wind: Wind,
-  mode: Mode,
-  names = ['동', '남', '서', '북']
-) => names[windsForMode[mode].indexOf(wind)]
-
+export const translateWind = (wind: Wind, mode: Mode, names = ['동', '남', '서', '북']) => names[windsForMode[mode].indexOf(wind)]

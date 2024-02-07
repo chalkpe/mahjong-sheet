@@ -19,11 +19,7 @@ const Score: FC<ScoreProps> = ({ wind, value, index }) => {
     set(dataAtom, data)
   })
 
-  return (
-    <Typography.Text editable={{ text: value.toString(), onChange }}>
-      {value.toLocaleString()}
-    </Typography.Text>
-  )
+  return <Typography.Text editable={{ text: value.toString(), onChange }}>{value.toLocaleString()}</Typography.Text>
 }
 
 export default Score

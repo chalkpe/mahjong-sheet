@@ -1,10 +1,6 @@
 import { FC } from 'react'
 import { Button, Space, message } from 'antd'
-import {
-  ExportOutlined,
-  GithubOutlined,
-  ImportOutlined
-} from '@ant-design/icons'
+import { ExportOutlined, GithubOutlined, ImportOutlined } from '@ant-design/icons'
 
 import { useAtom } from 'jotai'
 import modeAtom from '../../store/mode'
@@ -50,12 +46,7 @@ const ExtraButtons: FC = () => {
         내보내기
       </Button>
 
-      <Button
-        icon={<GithubOutlined />}
-        onClick={() =>
-          open('https://github.com/chalkpe/mahjong-sheet', '_blank')
-        }
-      />
+      <Button icon={<GithubOutlined />} onClick={() => open('https://github.com/chalkpe/mahjong-sheet', '_blank')} />
     </Space>
   )
 }
