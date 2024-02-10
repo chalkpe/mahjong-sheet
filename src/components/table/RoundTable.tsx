@@ -23,6 +23,7 @@ const RoundTable: FC = () => {
 
   return (
     <Table
+      sticky
       bordered
       pagination={false}
       dataSource={data}
@@ -114,6 +115,7 @@ const RoundTable: FC = () => {
         },
         {
           title: '삭제',
+          width: 100,
           align: 'center',
           render: (_, __, index) => (
             <Button

@@ -163,6 +163,7 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
           : []),
         {
           title: '삭제',
+          width: 100,
           align: 'center',
           render: (_, __, index) => {
             if (index >= umas.length) return null
