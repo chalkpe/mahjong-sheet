@@ -121,91 +121,93 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
   const sumRanks = useMemo(() => calculateRanks(sum, mode), [sum, mode])
 
   return (
-    <Table
-      style={{ width: 'fit-content' }}
-      bordered
-      pagination={false}
-      columns={[
-        {
-          title: '',
-          dataIndex: 'title',
-          width: 130,
-          render: (title: string) => <Typography.Text strong>{title}</Typography.Text>,
-        },
-        {
-          title: names[0],
-          dataIndex: 'east',
-          width: 100,
-          align: 'center',
-        },
-        {
-          title: names[1],
-          dataIndex: 'south',
-          width: 100,
-          align: 'center',
-        },
-
-        {
-          title: names[2],
-          dataIndex: 'west',
-          width: 100,
-          align: 'center',
-        },
-        ...(mode === 4
-          ? [
-              {
-                title: names[3],
-                dataIndex: 'north',
-                width: 100,
-                align: 'center' as const,
-              },
-            ]
-          : []),
-        {
-          title: '삭제',
-          width: 100,
-          align: 'center',
-          render: (_, __, index) => {
-            if (index >= umas.length) return null
-            return (
-              <Button
-                type="link"
-                onClick={() => {
-                  const newScores = [...scores]
-                  newScores.splice(index, 1)
-                  setScores(newScores)
-                }}
-              >
-                삭제
-              </Button>
-            )
+    <article style={{ width: '630px' }}>
+      <Table
+        sticky
+        bordered
+        pagination={false}
+        columns={[
+          {
+            title: '',
+            dataIndex: 'title',
+            width: 130,
+            render: (title: string) => <Typography.Text strong>{title}</Typography.Text>,
           },
-        },
-      ]}
-      dataSource={[
-        ...umas.map((uma, index) => ({
-          title: `#${index + 1}`,
-          east: uma ? render(uma[0], ranks[index], 0) : '-',
-          south: uma ? render(uma[1], ranks[index], 1) : '-',
-          west: uma ? render(uma[2], ranks[index], 2) : '-',
-          north: uma ? render(uma[3], ranks[index], 3) : '-',
-        })),
-        {
-          title: '현재',
-          east: lastUma ? render(lastUma[0], lastRanks, 0) : '-',
-          south: lastUma ? render(lastUma[1], lastRanks, 1) : '-',
-          west: lastUma ? render(lastUma[2], lastRanks, 2) : '-',
-          north: lastUma ? render(lastUma[3], lastRanks, 3) : '-',
-        },
-        {
-          title: '총합',
-          east: render(sum.east, sumRanks, 0),
-          south: render(sum.south, sumRanks, 1),
-          west: render(sum.west, sumRanks, 2),
-          north: render(sum.north, sumRanks, 3),
-        },
-      ]}
-    />
+          {
+            title: names[0],
+            dataIndex: 'east',
+            width: 100,
+            align: 'center',
+          },
+          {
+            title: names[1],
+            dataIndex: 'south',
+            width: 100,
+            align: 'center',
+          },
+
+          {
+            title: names[2],
+            dataIndex: 'west',
+            width: 100,
+            align: 'center',
+          },
+          ...(mode === 4
+            ? [
+                {
+                  title: names[3],
+                  dataIndex: 'north',
+                  width: 100,
+                  align: 'center' as const,
+                },
+              ]
+            : []),
+          {
+            title: '삭제',
+            width: 100,
+            align: 'center',
+            render: (_, __, index) => {
+              if (index >= umas.length) return null
+              return (
+                <Button
+                  type="link"
+                  onClick={() => {
+                    const newScores = [...scores]
+                    newScores.splice(index, 1)
+                    setScores(newScores)
+                  }}
+                >
+                  삭제
+                </Button>
+              )
+            },
+          },
+        ]}
+        dataSource={[
+          ...umas.map((uma, index) => ({
+            title: `#${index + 1}`,
+            east: uma ? render(uma[0], ranks[index], 0) : '-',
+            south: uma ? render(uma[1], ranks[index], 1) : '-',
+            west: uma ? render(uma[2], ranks[index], 2) : '-',
+            north: uma ? render(uma[3], ranks[index], 3) : '-',
+          })),
+          {
+            title: '현재',
+            east: lastUma ? render(lastUma[0], lastRanks, 0) : '-',
+            south: lastUma ? render(lastUma[1], lastRanks, 1) : '-',
+            west: lastUma ? render(lastUma[2], lastRanks, 2) : '-',
+            north: lastUma ? render(lastUma[3], lastRanks, 3) : '-',
+          },
+          {
+            title: '총합',
+            east: render(sum.east, sumRanks, 0),
+            south: render(sum.south, sumRanks, 1),
+            west: render(sum.west, sumRanks, 2),
+            north: render(sum.north, sumRanks, 3),
+          },
+        ]}
+      />
+    </article>
   )
 }
 
