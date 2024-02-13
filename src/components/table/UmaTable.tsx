@@ -121,7 +121,7 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
   const sumRanks = useMemo(() => calculateRanks(sum, mode), [sum, mode])
 
   return (
-    <article style={{ width: '630px' }}>
+    <article style={{ width: mode === 3 ? '530px' : '630px' }}>
       <Table
         sticky
         bordered
