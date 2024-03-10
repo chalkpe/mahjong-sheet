@@ -25,7 +25,7 @@ const Ba: FC<BaProps> = ({ round, setRound }) => {
 
   if (isEditing) {
     return (
-      <Space>
+      <Space wrap>
         <Select
           value={ba}
           onChange={(b) => {
