@@ -126,6 +126,7 @@ const UmaTable: FC<UmaTableProps> = ({ mode }) => {
         sticky
         bordered
         pagination={false}
+        rowKey={(column) => column.title}
         columns={[
           {
             title: '',
